@@ -1,0 +1,3 @@
+db.url=mysql://projgw.cse.cuhk.edu.hk:2633/db33
+db.user=Group33
+db.password=CSCI3170

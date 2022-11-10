@@ -1,0 +1,4 @@
+.DS_Store
+.idea
+src/main/resources/config.properties
+target
