@@ -5,17 +5,14 @@ Group member name   (SID):
     Chow Chi Hong   (1155159063)
 
 Prerequisite:
-    Note that this project is using JDK 8 and we will use docker
-    for development usage, for the following setup to work,
-    we need to
+    Note that this project is using JDK 8 and we will use docker for development usage, for the following setup to work, we need to
     
     1. Install JDK 8
     2. Install docker
 
 Environment setup:
-    This project is using the file config.properties for configuration
-    of database credentials. Please perform the following procedure
-    based on your current environment.
+    This project is using the file config.properties for configuration of database credentials.
+    Please perform the following procedure based on your current environment:
 
     Development (running on local machine):
         1.  Run 'make setup-local'
