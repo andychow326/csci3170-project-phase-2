@@ -1,7 +1,7 @@
 package client;
 
 import java.sql.SQLException;
-import java.io.IOExeception;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Administrator {

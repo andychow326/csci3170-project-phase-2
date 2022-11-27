@@ -18,7 +18,7 @@ public class SalesSystem {
     }
 
     private void displayMainMenu(){
-        Boolean isExit = false
+        Boolean isExit = false;
         while (!isExit){
             System.out.println("\nWhat kinds of operation would you like to perform?");
             System.out.println("1. Operations for administrator");
@@ -31,23 +31,22 @@ public class SalesSystem {
 
     private Boolean selectRole(){
         System.out.print("Enter Your Choice: ");
-        int choice;
+        int choice = 0;
         Boolean isExit = false;
         try{
             choice = input.nextInt();
-            return choice;
         } catch (Exception e){
             System.out.println("ERROR!! You did not input a integer!");
         }
         switch(choice){
             case 1:
-                Adminstrator role = new Administrator(db);
+                Administrator admin = new Administrator(db);
                 break;
             case 2:
-                SalsePerson role = new SalesPerson(db);
+                SalesPerson sales = new SalesPerson(db);
                 break;
             case 3:
-                Manager role = new Manager(db);
+                Manager head = new Manager(db);
                 break;
             case 4:
                 isExit = true;
@@ -56,7 +55,7 @@ public class SalesSystem {
                 System.out.println("ERROR!! Input must be within 1 to 4!");
                 break;
         }
-
+        return isExit;
     }
 }
 /*
