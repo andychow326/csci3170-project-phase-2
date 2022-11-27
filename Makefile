@@ -30,3 +30,7 @@ start: ./target/classes/client/Main.class ./target/classes/mysql-jdbc.jar
 run:
 	@make build
 	@make start
+
+.PHONY: check-tidy
+check-tidy:
+	git status --porcelain | grep '.*'; test $$? -eq 1
