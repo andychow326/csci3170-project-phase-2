@@ -11,5 +11,16 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        SalesSystem ss = new SalesSystem(dbClient);
+        ss.execute();
+        try {
+            if (dbClient.connection != null){
+                dbClient.connection.close();
+            }
+        } catch (SQLException e){
+            System.out.println("ERROR! Cannot close the connection");
+        }
+        System.out.println("Sales System Terminated.");
+        System.exit(0);
     }
 }
