@@ -1,4 +1,8 @@
 .DS_Store
 .idea
 src/main/resources/config.properties
-target
+target/*
+!target/.gitkeep
+!target/classes
+target/classes/*
+!target/classes/.gitkeep
