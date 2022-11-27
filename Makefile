@@ -11,6 +11,7 @@ setup-prod: ./config.properties.production
 .PHONY: clean
 clean:
 	@rm -rf ./target
+	@git checkout -- ./target
 
 .PHONY: build
 build: ./src/main/resources/config.properties ./src/main/resources/mysql-jdbc.jar
