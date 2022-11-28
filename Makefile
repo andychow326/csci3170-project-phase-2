@@ -1,4 +1,4 @@
-JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+JAVA_HOME=/usr/libexec/java_home -v 1.8
 
 .PHONY: setup-local
 setup-local: ./config.properties.local
@@ -17,14 +17,14 @@ clean:
 build: ./src/main/resources/config.properties ./src/main/resources/mysql-jdbc.jar
 	@printf "Compiling..."
 	@make clean
-	@$(JAVA_HOME)/bin/javac -d ./target/classes ./src/main/java/**/*.java
+	@$(JAVA_HOME) --exec javac -d ./target/classes ./src/main/java/**/*.java
 	@cp ./src/main/resources/config.properties ./target/classes/
 	@cp ./src/main/resources/mysql-jdbc.jar ./target/classes/
 	@printf "Done!\n"
 
 .PHONY: start
 start: ./target/classes/client/Main.class ./target/classes/mysql-jdbc.jar
-	@$(JAVA_HOME)/bin/java -cp ./target/classes/mysql-jdbc.jar:./target/classes client.Main
+	@$(JAVA_HOME) --exec java -cp ./target/classes/mysql-jdbc.jar:./target/classes client.Main
 
 .PHONY: run
 run:
