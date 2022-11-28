@@ -1,3 +1,5 @@
+-- +migrate Up
+
 CREATE TABLE category (
     cID    INTEGER PRIMARY KEY,
     cName  VARCHAR(20) UNIQUE NOT NULL
@@ -44,3 +46,10 @@ CREATE TABLE transaction (
     FOREIGN KEY(sID)
         REFERENCES salesperson(sID) ON DELETE CASCADE
 );
+
+-- +migrate Down
+DROP TABLE transaction;
+DROP TABLE salesperson;
+DROP TABLE part;
+DROP TABLE manufacturer;
+DROP TABLE category;
