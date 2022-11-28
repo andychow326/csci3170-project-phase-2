@@ -20,7 +20,7 @@ public class Administrator {
     String[] tables = { "category", "manufacturer", "part", "salesperson", "transaction" };
 
     // constructor
-    public Administrator(DatabaseClient dbClient) {
+    public Administrator(DatabaseClient dbClient) throws IOException {
         this.db = dbClient;
         this.conn = dbClient.connection;
         // start of the Administrator Operation
@@ -28,7 +28,7 @@ public class Administrator {
         displayAdminMenu();
     }
 
-    private void displayAdminMenu() {
+    private void displayAdminMenu() throws IOException {
         Boolean isExit = false;
         while (!isExit) {
             System.out.println("\n-----Operations for administrator menu-----");
@@ -42,7 +42,7 @@ public class Administrator {
         }
     }
 
-    private Boolean selectOp() {
+    private Boolean selectOp() throws IOException {
         System.out.print("Enter Your Choice: ");
         int choice = 0;
         Boolean isExit = false;
@@ -84,69 +84,16 @@ public class Administrator {
         return isExit;
     }
 
-    private void createTables() throws SQLException {
+    private void createTables() throws SQLException, IOException {
         System.out.print("Processing...");
-
-        // for rollback
-        conn.setAutoCommit(false);
-
-        // create sql statement
-        Statement stmt = conn.createStatement();
-
-        // create schema string
-        String category = "CREATE TABLE IF NOT EXISTS category (cID INTEGER PRIMARY KEY, cNAME VARCHAR(20) UNIQUE NOT NULL)";
-        String manufacturer = "CREATE TABLE IF NOT EXISTS manufacturer (mID INTEGER PRIMARY KEY, mNAME VARCHAR(20) NOT NULL, mAddress VARCHAR(50) NOT NULL, mPhoneNumber INTEGER NOT NULL)";
-        String part = "CREATE TABLE IF NOT EXISTS part (pID INTEGER PRIMARY KEY, pName VARCHAR(20) NOT NULL, pPrice INTEGER NOT NULL, mID INTEGER NOT NULL, cID INTEGER NOT NULL, pWarrantyPeriod INTEGER NOT NULL, pAvailableQuantity INTEGER NOT NULL, FOREIGN KEY (mID) REFERENCES manufacturer (mID) ON DELETE CASCADE, FOREIGN KEY (cID) REFERENCES category (cID) ON DELETE CASCADE)";
-        String salesperson = "CREATE TABLE IF NOT EXISTS salesperson (sID INTEGER PRIMARY KEY, sName VARCHAR(20) NOT NULL, sAddress VARCHAR(50) NOT NULL, sPhoneNumber INTEGER NOT NULL, sExperience INTEGER NOT NULL)";
-        String transaction = "CREATE TABLE IF NOT EXISTS transaction (tID INTEGER PRIMARY KEY, pID INTEGER NOT NULL, sID INTEGER NOT NULL, tDate DATE NOT NULL, FOREIGN KEY(pID) REFERENCES part(pID) ON DELETE CASCADE, FOREIGN KEY(sID) REFERENCES salesperson(sID) ON DELETE CASCADE)";
-
-        try {
-            // create the tables in db
-            stmt.executeUpdate(category);
-            stmt.executeUpdate(manufacturer);
-            stmt.executeUpdate(part);
-            stmt.executeUpdate(salesperson);
-            stmt.executeUpdate(transaction);
-
-            // commit the update done
-            conn.commit();
-
-            System.out.print("Done! ");
-            System.out.print("DataBase is initialized!");
-        } catch (Exception e) {
-            System.out.println("\nERROR" + e);
-            throw e;
-        }
+        this.db.migrator.up();
+        System.out.println("Done! Database is initialized!");
     }
 
-    private void deleteTables() throws SQLException {
+    private void deleteTables() throws SQLException, IOException {
         System.out.print("Processing...");
-
-        // for rollback
-        conn.setAutoCommit(false);
-
-        // create sql statement
-        Statement stmt = conn.createStatement();
-
-        // create schema string
-        String delete = "DROP TABLES IF EXISTS ";
-
-        try {
-            foreignKCheck(false);
-            // create the tables in db
-            for (String table : tables) {
-                stmt.executeUpdate(delete + table);
-            }
-            foreignKCheck(true);
-            // commit the update done
-            conn.commit();
-
-            System.out.print("Done! ");
-            System.out.print("DataBase is removed!");
-        } catch (Exception e) {
-            System.out.println("\nERROR" + e);
-            throw e;
-        }
+        this.db.migrator.down();
+        System.out.println("Done! Database is removed!");
     }
 
     private void loadData() throws SQLException {

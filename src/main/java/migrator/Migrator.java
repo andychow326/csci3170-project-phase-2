@@ -58,15 +58,11 @@ public class Migrator {
     }
 
     public void up() throws SQLException, IOException {
-        System.out.print("Processing...");
         this.migrate(MigrationType.UP);
-        System.out.println("Done! Database is initialized!");
     }
 
     public void down() throws SQLException, IOException {
-        System.out.print("Processing...");
         this.migrate(MigrationType.DOWN);
-        System.out.println("Done! Database is removed!");
     }
 
     private Statement loadSchema(MigrationType type) throws SQLException, IOException {

@@ -1,6 +1,7 @@
 package client;
 
 import java.sql.SQLException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class SalesSystem {
@@ -12,12 +13,12 @@ public class SalesSystem {
         this.db = dbClient;
     }
 
-    public void execute() {
+    public void execute() throws IOException {
         System.out.println("Welcome to sales system!");
         displayMainMenu();
     }
 
-    private void displayMainMenu() {
+    private void displayMainMenu() throws IOException {
         Boolean isExit = false;
         while (!isExit) {
             System.out.println("\n-----Main Menu-----");
@@ -30,7 +31,7 @@ public class SalesSystem {
         }
     }
 
-    private Boolean selectRole() {
+    private Boolean selectRole() throws IOException {
         System.out.print("Enter Your Choice: ");
         int choice = 0;
         Boolean isExit = false;
@@ -59,9 +60,3 @@ public class SalesSystem {
         return isExit;
     }
 }
-/*
- * here is the code to start the project
- * javac xxx.java
- * java -classpath ./mysql-jdbc.jar:./ xxx
- * Here xxx is your java code file name.
- */
