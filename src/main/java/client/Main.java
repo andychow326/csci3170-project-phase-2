@@ -10,18 +10,12 @@ public class Main {
             DatabaseClient dbClient = new DatabaseClient(config);
             SalesSystem ss = new SalesSystem(dbClient);
             ss.execute();
-            try {
-                if (dbClient.connection != null) {
-                    dbClient.connection.close();
-                }
-            } catch (Exception e) {
-                System.out.println("ERROR! Cannot close the connection");
-            }
+            dbClient.closeConnection();
             System.out.println("Sales System Terminated.");
             System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(1);
         }
-
     }
 }

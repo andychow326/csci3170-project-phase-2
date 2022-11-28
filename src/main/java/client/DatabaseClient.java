@@ -18,4 +18,14 @@ public class DatabaseClient {
             throw e;
         }
     }
+
+    public void closeConnection() {
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            System.out.println("ERROR! Cannot close the connection");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 }
