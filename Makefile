@@ -1,3 +1,8 @@
+CSE_MACHINE=`uname -a | grep 'cse.cuhk.edu.hk'`
+ifneq ($(CSE_MACHINE),'')
+	INCI=true
+endif
+
 ifeq ($(INCI),true)
 	JAVA=java
 	JAVAC=javac
