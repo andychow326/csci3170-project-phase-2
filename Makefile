@@ -29,6 +29,7 @@ start: ./target/classes/client/Main.class ./target/classes/mysql-jdbc.jar
 .PHONY: run
 run:
 	@make build
+	@clear
 	@make start
 
 .PHONY: check-tidy
