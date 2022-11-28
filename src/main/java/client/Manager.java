@@ -8,12 +8,11 @@ public class Manager {
     private Scanner input = new Scanner(System.in);
     private DatabaseClient db;
 
-    //constructor
-    public Manager(DatabaseClient dbClient){
+    // constructor
+    public Manager(DatabaseClient dbClient) {
         this.db = dbClient;
-        //start of the Manager Operation
+        // start of the Manager Operation
         System.out.println("Manager Operation!!");
     }
-
 
 }

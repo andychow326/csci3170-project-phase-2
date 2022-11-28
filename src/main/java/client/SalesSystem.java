@@ -7,19 +7,19 @@ public class SalesSystem {
     private Scanner input = new Scanner(System.in);
     private DatabaseClient db;
 
-    //constructor
-    public SalesSystem(DatabaseClient dbClient){
+    // constructor
+    public SalesSystem(DatabaseClient dbClient) {
         this.db = dbClient;
     }
 
-    public void execute(){
+    public void execute() {
         System.out.println("Welcome to sales system!");
         displayMainMenu();
     }
 
-    private void displayMainMenu(){
+    private void displayMainMenu() {
         Boolean isExit = false;
-        while (!isExit){
+        while (!isExit) {
             System.out.println("\n-----Main Menu-----");
             System.out.println("What kinds of operation would you like to perform?");
             System.out.println("1. Operations for administrator");
@@ -30,16 +30,16 @@ public class SalesSystem {
         }
     }
 
-    private Boolean selectRole(){
+    private Boolean selectRole() {
         System.out.print("Enter Your Choice: ");
         int choice = 0;
         Boolean isExit = false;
-        try{
+        try {
             choice = input.nextInt();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("ERROR!! You did not input a integer!");
         }
-        switch(choice){
+        switch (choice) {
             case 1:
                 Administrator admin = new Administrator(db);
                 break;
@@ -60,8 +60,8 @@ public class SalesSystem {
     }
 }
 /*
-here is the code to start the project
-javac xxx.java
-java -classpath ./mysql-jdbc.jar:./ xxx
-Here xxx is your java code file name.
-*/
+ * here is the code to start the project
+ * javac xxx.java
+ * java -classpath ./mysql-jdbc.jar:./ xxx
+ * Here xxx is your java code file name.
+ */

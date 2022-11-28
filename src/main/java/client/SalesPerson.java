@@ -8,12 +8,11 @@ public class SalesPerson {
     private Scanner input = new Scanner(System.in);
     private DatabaseClient db;
 
-    //constructor
-    public SalesPerson(DatabaseClient dbClient){
+    // constructor
+    public SalesPerson(DatabaseClient dbClient) {
         this.db = dbClient;
-        //start of the SalesPerson Operation
+        // start of the SalesPerson Operation
         System.out.println("SalesPerson Operation!!");
     }
-
 
 }
