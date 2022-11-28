@@ -20,7 +20,8 @@ public class SalesSystem {
     private void displayMainMenu(){
         Boolean isExit = false;
         while (!isExit){
-            System.out.println("\nWhat kinds of operation would you like to perform?");
+            System.out.println("\n-----Main Menu-----");
+            System.out.println("What kinds of operation would you like to perform?");
             System.out.println("1. Operations for administrator");
             System.out.println("2. Operations for salesperson");
             System.out.println("3. Operations for manager");
