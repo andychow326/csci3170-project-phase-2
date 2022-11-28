@@ -13,17 +13,10 @@ import client.DatabaseClient;
 public class Migrator {
     public final static String SCHEMA_FILENAME = "schema.sql";
     public final static char QUERY_SEPARATOR = ';';
-    private BufferedReader schemaReader;
     private DatabaseClient dbClient;
 
-    public Migrator(DatabaseClient dbClient) throws FileNotFoundException {
+    public Migrator(DatabaseClient dbClient) {
         this.dbClient = dbClient;
-
-        InputStream input = getClass().getClassLoader().getResourceAsStream(SCHEMA_FILENAME);
-        if (input == null) {
-            throw new FileNotFoundException("Error loading schema file");
-        }
-        this.schemaReader = new BufferedReader(new InputStreamReader(input));
     }
 
     public static enum MigrationType {
@@ -71,8 +64,14 @@ public class Migrator {
         StringBuffer query = new StringBuffer();
         boolean isHandlingInvalidLine = false;
 
+        InputStream input = getClass().getClassLoader().getResourceAsStream(SCHEMA_FILENAME);
+        if (input == null) {
+            throw new FileNotFoundException("Error loading schema file");
+        }
+        BufferedReader schemaReader = new BufferedReader(new InputStreamReader(input));
+
         statement = this.dbClient.getConnection().createStatement();
-        while ((line = this.schemaReader.readLine()) != null) {
+        while ((line = schemaReader.readLine()) != null) {
             if (isHandlingInvalidLine) {
                 if (type.isKeyString(line) && type.getKeyString().equals(line)) {
                     isHandlingInvalidLine = false;
