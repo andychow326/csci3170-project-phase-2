@@ -356,7 +356,6 @@ public class Administrator {
         System.out.print("Which table would you like to show: ");
         String rm = input.nextLine();
         String choice = input.nextLine();
-        System.out.print("choice="+choice);
         Boolean inTables = false;
         for (String table : tables){
             if (choice.equals(table)){
@@ -367,7 +366,6 @@ public class Administrator {
             System.out.println(choice+" is not a table in database.");
             return;
         }
-        System.out.print("Processing...");
 
         // for rollback
         conn.setAutoCommit(false);
