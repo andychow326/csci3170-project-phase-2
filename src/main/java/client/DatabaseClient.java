@@ -14,9 +14,13 @@ public class DatabaseClient {
                     "jdbc:" + config.DatabaseURL,
                     config.DatabaseUser,
                     config.DatabasePassword);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw e;
         }
+    }
+
+    public Connection getConnection() {
+        return this.connection;
     }
 
     public void closeConnection() {
