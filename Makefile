@@ -14,12 +14,12 @@ clean:
 	@git checkout -- ./target
 
 .PHONY: build
-build: ./src/main/resources/config.properties ./src/main/resources/mysql-jdbc.jar
+build: ./src/main/resources/config.properties ./src/main/resources/schema.sql ./src/main/resources/mysql-jdbc.jar
 	@printf "Compiling..."
 	@make clean
 	@$(JAVA_HOME) --exec javac -d ./target/classes ./src/main/java/**/*.java
 	@cp ./src/main/resources/config.properties ./target/classes/
-	@cp ./src/main/resources/mysql-jdbc.jar ./target/classes/
+	@cp ./src/main/resources/* ./target/classes/
 	@printf "Done!\n"
 
 .PHONY: start
