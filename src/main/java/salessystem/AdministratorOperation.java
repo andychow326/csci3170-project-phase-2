@@ -1,4 +1,4 @@
-package client;
+package salessystem;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,52 +9,45 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import client.DatabaseClient;
 import dao.CategoryDaoImpl;
 import dao.ManufacturerDaoImpl;
 import dao.PartDaoImpl;
 import dao.SalesPersonDaoImpl;
 import dao.TransactionDaoImpl;
+import dao.Dao.OrderDirection;
 import model.Category;
+import model.CategoryColumnKey;
 import model.Manufacturer;
+import model.ManufacturerColumnKey;
 import model.Part;
+import model.PartColumnKey;
 import model.SalesPerson;
+import model.SalesPersonColumnKey;
 import model.Transaction;
+import model.TransactionColumnKey;
 
 import java.text.ParseException;
 
-public class AdministratorOperation {
-    private BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
-    private DatabaseClient db;
-    public Connection conn;
-
-    static final String[] TABLES = {
-            Category.TABLE_NAME,
-            Manufacturer.TABLE_NAME,
-            Part.TABLE_NAME,
-            SalesPerson.TABLE_NAME,
-            Transaction.TABLE_NAME
-    };
-
+public class AdministratorOperation extends BaseOperation {
     // constructor
     public AdministratorOperation(DatabaseClient dbClient) throws IOException {
-        this.db = dbClient;
-        this.conn = dbClient.connection;
-        // start of the Administrator Operation
-        // System.out.println("Administrator Operation!!");
+        super(dbClient);
+    }
+
+    public void start() {
         displayAdminMenu();
     }
 
     private void displayAdminMenu() {
-        Boolean isExit = false;
+        boolean isExit = false;
         while (!isExit) {
             System.out.println("\n-----Operations for administrator menu-----");
-            System.out.println("\nWhat kinds of operation would you like to perform?");
+            System.out.println("What kinds of operation would you like to perform?");
             System.out.println("1. Create all tables");
             System.out.println("2. Delete all tables");
             System.out.println("3. Load from datafile");
@@ -76,22 +69,15 @@ public class AdministratorOperation {
         }
     }
 
-    private Boolean selectOp() throws SQLException, IOException {
+    private boolean selectOp() throws SQLException, IOException {
         System.out.print("Enter Your Choice: ");
-        int choice = 0;
-        Boolean isExit = false;
-        try {
-            String input = inputReader.readLine();
-            if (input.isEmpty() || !isValidOption(input)) {
-                System.out.println("Please enter a valid option");
-                return isExit;
-            }
+        boolean isExit = false;
 
-            choice = Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            System.out.println("Please enter a valid number");
+        int choice = getInputOption();
+        if (choice < 0) {
             return isExit;
         }
+
         switch (choice) {
             case 1:
                 createTables();
@@ -315,7 +301,9 @@ public class AdministratorOperation {
             switch (choice) {
                 case "category":
                     CategoryDaoImpl categoryDao = new CategoryDaoImpl(this.conn);
-                    List<Category> categories = categoryDao.getAllCategories();
+                    List<Category> categories = categoryDao
+                            .orderBy(CategoryColumnKey.ID, OrderDirection.ASC)
+                            .getAllCategories();
 
                     System.out.println("| cID | cName |");
                     categories.forEach(
@@ -325,7 +313,9 @@ public class AdministratorOperation {
                     break;
                 case "manufacturer":
                     ManufacturerDaoImpl manufacturerDao = new ManufacturerDaoImpl(this.conn);
-                    List<Manufacturer> manufacturers = manufacturerDao.getAllManufacturers();
+                    List<Manufacturer> manufacturers = manufacturerDao
+                            .orderBy(ManufacturerColumnKey.ID, OrderDirection.ASC)
+                            .getAllManufacturers();
 
                     System.out.println("| mID | mName | mAddress | mPhoneNumber |");
                     manufacturers.forEach(
@@ -338,7 +328,9 @@ public class AdministratorOperation {
                     break;
                 case "part":
                     PartDaoImpl partDaoImpl = new PartDaoImpl(this.conn);
-                    List<Part> parts = partDaoImpl.getAllParts();
+                    List<Part> parts = partDaoImpl
+                            .orderBy(PartColumnKey.ID, OrderDirection.ASC)
+                            .getAllParts();
 
                     System.out.println("| pID | pName | pPrice | mID | cID | pWarrantyPeriod | pAvailableQuantity |");
                     parts.forEach(part -> System.out.printf(
@@ -353,7 +345,9 @@ public class AdministratorOperation {
                     break;
                 case "salesperson":
                     SalesPersonDaoImpl salesPersonDaoImpl = new SalesPersonDaoImpl(this.conn);
-                    List<SalesPerson> salesPersons = salesPersonDaoImpl.getAllSalesPersons();
+                    List<SalesPerson> salesPersons = salesPersonDaoImpl
+                            .orderBy(SalesPersonColumnKey.ID, OrderDirection.ASC)
+                            .getAllSalesPersons();
 
                     System.out.println("| sID | sName | sAddress | sPhoneNumber | sExperience |");
                     salesPersons.forEach(
@@ -367,7 +361,9 @@ public class AdministratorOperation {
                     break;
                 case "transaction":
                     TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
-                    List<Transaction> transactions = transactionDao.getAllTransactions();
+                    List<Transaction> transactions = transactionDao
+                            .orderBy(TransactionColumnKey.ID, OrderDirection.ASC)
+                            .getAllTransactions();
 
                     System.out.println("| tID | pID | sID | tDate |");
                     transactions.forEach(
@@ -383,13 +379,5 @@ public class AdministratorOperation {
             System.out.println("\nERROR" + e);
             throw e;
         }
-    }
-
-    private static boolean isValidTableName(String tableName) {
-        return Arrays.stream(TABLES).anyMatch(x -> x.equals(tableName));
-    }
-
-    private static boolean isValidOption(String s) {
-        return s.matches("^[a-zA-Z0-9]*$");
     }
 }

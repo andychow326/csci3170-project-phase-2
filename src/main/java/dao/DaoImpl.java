@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DaoImpl {
+import model.ColumnKey;
+
+public class DaoImpl<T> implements Dao<T> {
     protected Connection conn;
     protected List<String> querySuffix = new ArrayList<String>();
 
@@ -12,22 +14,23 @@ public class DaoImpl {
         this.conn = conn;
     }
 
+    @Override
     public String getQuerySuffix() {
         return String.join(" ", this.querySuffix);
     }
 
+    @Override
     public void addQuerySuffix(String suffix) {
         this.querySuffix.add(suffix);
     }
 
-    public enum OrderDirection {
-        ASC,
-        DESC
-    }
-
-    public void orderBy(String column, OrderDirection direction) {
+    // The unchecked warning is ignored assuming casting is valid
+    @SuppressWarnings("unchecked")
+    @Override
+    public T orderBy(ColumnKey column, OrderDirection direction) {
         this.addQuerySuffix("ORDER BY");
-        this.addQuerySuffix(column);
+        this.addQuerySuffix(column.toString());
         this.addQuerySuffix(direction.name());
+        return (T) this;
     }
 }

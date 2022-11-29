@@ -21,24 +21,6 @@ public class Transaction extends BaseModel {
         this.date = date;
     }
 
-    public static enum ColumnKey {
-        ID("tID"),
-        PART_ID("pID"),
-        SALES_PERSON_ID("sID"),
-        DATE("tDate");
-
-        private final String key;
-
-        ColumnKey(String key) {
-            this.key = key;
-        }
-
-        @Override
-        public String toString() {
-            return key;
-        }
-    }
-
     public int getPartID() {
         return this.partID;
     }

@@ -14,22 +14,6 @@ public class Category extends BaseModel {
         this.name = name;
     }
 
-    public static enum ColumnKey {
-        ID("cID"),
-        NAME("cName");
-
-        private final String key;
-
-        ColumnKey(String key) {
-            this.key = key;
-        }
-
-        @Override
-        public String toString() {
-            return key;
-        }
-    }
-
     public String getName() {
         return this.name;
     }

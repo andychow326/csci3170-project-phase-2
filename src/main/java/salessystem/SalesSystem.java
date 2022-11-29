@@ -1,8 +1,9 @@
-package client;
+package salessystem;
 
-import java.sql.SQLException;
 import java.io.IOException;
 import java.util.Scanner;
+
+import client.DatabaseClient;
 
 public class SalesSystem {
     private Scanner input = new Scanner(System.in);
@@ -43,12 +44,15 @@ public class SalesSystem {
         switch (choice) {
             case 1:
                 AdministratorOperation admin = new AdministratorOperation(db);
+                admin.start();
                 break;
             case 2:
                 SalesPersonOperation sales = new SalesPersonOperation(db);
+                sales.start();
                 break;
             case 3:
                 ManagerOperation head = new ManagerOperation(db);
+                head.start();
                 break;
             case 4:
                 isExit = true;

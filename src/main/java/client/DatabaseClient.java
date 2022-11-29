@@ -8,7 +8,7 @@ import config.Config;
 import migrator.Migrator;
 
 public class DatabaseClient {
-    public Connection connection;
+    private Connection connection;
     public Migrator migrator;
 
     public DatabaseClient(Config config) throws SQLException, FileNotFoundException {
