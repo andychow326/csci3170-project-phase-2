@@ -1,6 +1,7 @@
 package client;
 
 import config.Config;
+import salessystem.SalesSystem;
 
 public class Main {
     public static void main(String[] args) {

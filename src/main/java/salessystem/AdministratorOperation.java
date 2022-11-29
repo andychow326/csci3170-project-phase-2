@@ -1,4 +1,4 @@
-package client;
+package salessystem;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import client.DatabaseClient;
 import dao.CategoryDaoImpl;
 import dao.ManufacturerDaoImpl;
 import dao.PartDaoImpl;
@@ -34,18 +35,10 @@ import model.TransactionColumnKey;
 
 import java.text.ParseException;
 
-public class AdministratorOperation {
+public class AdministratorOperation extends BaseOperation {
     private BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
     private DatabaseClient db;
     private Connection conn;
-
-    static final String[] TABLES = {
-            Category.TABLE_NAME,
-            Manufacturer.TABLE_NAME,
-            Part.TABLE_NAME,
-            SalesPerson.TABLE_NAME,
-            Transaction.TABLE_NAME
-    };
 
     // constructor
     public AdministratorOperation(DatabaseClient dbClient) throws IOException {

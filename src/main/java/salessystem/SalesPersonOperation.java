@@ -1,10 +1,12 @@
-package client;
+package salessystem;
 
 import java.sql.SQLException;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class SalesPersonOperation {
+import client.DatabaseClient;
+
+public class SalesPersonOperation extends BaseOperation {
     private Scanner input = new Scanner(System.in);
     private DatabaseClient db;
 
