@@ -51,8 +51,6 @@ public class AdministratorOperation {
     public AdministratorOperation(DatabaseClient dbClient) throws IOException {
         this.db = dbClient;
         this.conn = dbClient.connection;
-        // start of the Administrator Operation
-        // System.out.println("Administrator Operation!!");
         displayAdminMenu();
     }
 
