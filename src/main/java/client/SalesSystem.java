@@ -42,13 +42,13 @@ public class SalesSystem {
         }
         switch (choice) {
             case 1:
-                Administrator admin = new Administrator(db);
+                AdministratorOperation admin = new AdministratorOperation(db);
                 break;
             case 2:
-                SalesPerson sales = new SalesPerson(db);
+                SalesPersonOperation sales = new SalesPersonOperation(db);
                 break;
             case 3:
-                Manager head = new Manager(db);
+                ManagerOperation head = new ManagerOperation(db);
                 break;
             case 4:
                 isExit = true;
