@@ -9,10 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import client.DatabaseClient;
@@ -36,19 +34,17 @@ import model.TransactionColumnKey;
 import java.text.ParseException;
 
 public class AdministratorOperation extends BaseOperation {
-    private BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
-    private DatabaseClient db;
-    private Connection conn;
-
     // constructor
     public AdministratorOperation(DatabaseClient dbClient) throws IOException {
-        this.db = dbClient;
-        this.conn = dbClient.getConnection();
+        super(dbClient);
+    }
+
+    public void start() {
         displayAdminMenu();
     }
 
     private void displayAdminMenu() {
-        Boolean isExit = false;
+        boolean isExit = false;
         while (!isExit) {
             System.out.println("\n-----Operations for administrator menu-----");
             System.out.println("What kinds of operation would you like to perform?");
@@ -73,22 +69,15 @@ public class AdministratorOperation extends BaseOperation {
         }
     }
 
-    private Boolean selectOp() throws SQLException, IOException {
+    private boolean selectOp() throws SQLException, IOException {
         System.out.print("Enter Your Choice: ");
-        int choice = 0;
-        Boolean isExit = false;
-        try {
-            String input = inputReader.readLine();
-            if (input.isEmpty() || !isValidOption(input)) {
-                System.out.println("Please enter a valid option");
-                return isExit;
-            }
+        boolean isExit = false;
 
-            choice = Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            System.out.println("Please enter a valid number");
+        int choice = getInputOption();
+        if (choice < 0) {
             return isExit;
         }
+
         switch (choice) {
             case 1:
                 createTables();
@@ -390,13 +379,5 @@ public class AdministratorOperation extends BaseOperation {
             System.out.println("\nERROR" + e);
             throw e;
         }
-    }
-
-    private static boolean isValidTableName(String tableName) {
-        return Arrays.stream(TABLES).anyMatch(x -> x.equals(tableName));
-    }
-
-    private static boolean isValidOption(String s) {
-        return s.matches("^[a-zA-Z0-9]*$");
     }
 }
