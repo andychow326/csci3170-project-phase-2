@@ -15,17 +15,37 @@ public class SalesPersonDaoImpl extends DaoImpl implements SalesPersonDao {
     }
 
     @Override
-    public int add(SalesPerson salesPerson) throws SQLException {
+    public PreparedStatement getAddStatement() throws SQLException {
         String query = "INSERT INTO "
                 + "salesperson (sID, sName, sAddress, sPhoneNumber, sExperience) "
                 + " VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement ps = conn.prepareStatement(query);
+        return conn.prepareStatement(query);
+    }
+
+    private PreparedStatement addSalesPerson(PreparedStatement ps, SalesPerson salesPerson) throws SQLException {
         ps.setInt(1, salesPerson.getID());
         ps.setString(2, salesPerson.getName());
         ps.setString(3, salesPerson.getAddress());
         ps.setInt(4, salesPerson.getPhoneNumber());
         ps.setInt(5, salesPerson.getExperience());
-        return ps.executeUpdate();
+        return ps;
+    }
+
+    @Override
+    public int add(SalesPerson salesPerson) throws SQLException {
+        PreparedStatement ps = getAddStatement();
+        return addSalesPerson(ps, salesPerson).executeUpdate();
+    }
+
+    @Override
+    public int[] addAll(List<SalesPerson> salesPersons) throws SQLException {
+        PreparedStatement ps = getAddStatement();
+
+        for (SalesPerson salesPerson : salesPersons) {
+            ps = addSalesPerson(ps, salesPerson);
+            ps.addBatch();
+        }
+        return ps.executeBatch();
     }
 
     @Override
@@ -58,7 +78,7 @@ public class SalesPersonDaoImpl extends DaoImpl implements SalesPersonDao {
 
     @Override
     public List<SalesPerson> getAllSalesPersons() throws SQLException {
-        String query = "SELECT * FROM salesperson";
+        String query = "SELECT * FROM salesperson " + getQuerySuffix();
         PreparedStatement ps = conn.prepareStatement(query);
 
         ResultSet rs = ps.executeQuery();

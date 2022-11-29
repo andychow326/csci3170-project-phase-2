@@ -5,6 +5,8 @@ public class Manufacturer extends BaseModel {
     protected String address;
     protected int phoneNumber;
 
+    public static final String TABLE_NAME = "manufacturer";
+
     public Manufacturer() {
         super();
     }
@@ -18,6 +20,24 @@ public class Manufacturer extends BaseModel {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
+    }
+
+    public static enum ColumnKey {
+        ID("mID"),
+        NAME("mName"),
+        ADDRESS("mAddress"),
+        PHONE_NUMBER("mPhoneNumber");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return key;
+        }
     }
 
     public String getName() {
@@ -42,5 +62,18 @@ public class Manufacturer extends BaseModel {
 
     public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public static Manufacturer parseString(String rawString) throws IllegalArgumentException {
+        String[] record = rawString.split("\t");
+        if (record.length != 4) {
+            throw new IllegalArgumentException(
+                    "Invalid number of entries, expected: 4, actual: " + record.length);
+        }
+        return new Manufacturer(
+                Integer.parseInt(record[0]),
+                record[1],
+                record[2],
+                Integer.parseInt(record[3]));
     }
 }

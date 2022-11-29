@@ -14,11 +14,14 @@ public class PartDaoImpl extends DaoImpl implements PartDao {
     }
 
     @Override
-    public int add(Part part) throws SQLException {
+    public PreparedStatement getAddStatement() throws SQLException {
         String query = "INSERT INTO "
                 + "part (pID, pName, pPrice, mID, cID, pWarrantyPeriod, pAvailableQuantity) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement ps = conn.prepareStatement(query);
+        return conn.prepareStatement(query);
+    }
+
+    private PreparedStatement addPart(PreparedStatement ps, Part part) throws SQLException {
         ps.setInt(1, part.getID());
         ps.setString(2, part.getName());
         ps.setInt(3, part.getPrice());
@@ -26,7 +29,23 @@ public class PartDaoImpl extends DaoImpl implements PartDao {
         ps.setInt(5, part.getCategoryID());
         ps.setInt(6, part.getWarrantyPeriod());
         ps.setInt(7, part.getAvailableQuantity());
-        return ps.executeUpdate();
+        return ps;
+    }
+
+    @Override
+    public int add(Part part) throws SQLException {
+        PreparedStatement ps = getAddStatement();
+        return addPart(ps, part).executeUpdate();
+    }
+
+    @Override
+    public int[] addAll(List<Part> parts) throws SQLException {
+        PreparedStatement ps = getAddStatement();
+        for (Part part : parts) {
+            ps = addPart(ps, part);
+            ps.addBatch();
+        }
+        return ps.executeBatch();
     }
 
     @Override
@@ -61,7 +80,7 @@ public class PartDaoImpl extends DaoImpl implements PartDao {
 
     @Override
     public List<Part> getAllParts() throws SQLException {
-        String query = "SELECT * FROM part";
+        String query = "SELECT * FROM part " + getQuerySuffix();
         PreparedStatement ps = conn.prepareStatement(query);
 
         ResultSet rs = ps.executeQuery();

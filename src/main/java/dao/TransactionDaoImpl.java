@@ -15,16 +15,36 @@ public class TransactionDaoImpl extends DaoImpl implements TransactionDao {
     }
 
     @Override
-    public int add(Transaction transaction) throws SQLException {
+    public PreparedStatement getAddStatement() throws SQLException {
         String query = "INSERT INTO "
                 + "transaction (tID, pID, sID, tDate) "
                 + "VALUES (?, ?, ?, ?)";
-        PreparedStatement ps = conn.prepareStatement(query);
+        return conn.prepareStatement(query);
+    }
+
+    private PreparedStatement addTransaction(PreparedStatement ps, Transaction transaction) throws SQLException {
         ps.setInt(1, transaction.getID());
         ps.setInt(2, transaction.getPartID());
         ps.setInt(3, transaction.getSalesPersonID());
         ps.setDate(4, transaction.getDate());
-        return ps.executeUpdate();
+        return ps;
+    }
+
+    @Override
+    public int add(Transaction transaction) throws SQLException {
+        PreparedStatement ps = getAddStatement();
+        return addTransaction(ps, transaction).executeUpdate();
+    }
+
+    @Override
+    public int[] addAll(List<Transaction> transactions) throws SQLException {
+        PreparedStatement ps = getAddStatement();
+
+        for (Transaction transaction : transactions) {
+            ps = addTransaction(ps, transaction);
+            ps.addBatch();
+        }
+        return ps.executeBatch();
     }
 
     @Override
@@ -56,7 +76,7 @@ public class TransactionDaoImpl extends DaoImpl implements TransactionDao {
 
     @Override
     public List<Transaction> getAllTransactions() throws SQLException {
-        String query = "SELECT * FROM transaction";
+        String query = "SELECT * FROM transaction " + getQuerySuffix();
         PreparedStatement ps = conn.prepareStatement(query);
 
         ResultSet rs = ps.executeQuery();

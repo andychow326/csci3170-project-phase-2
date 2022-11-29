@@ -1,11 +1,14 @@
 package model;
 
 import java.sql.Date;
+import java.text.ParseException;
 
 public class Transaction extends BaseModel {
     protected int partID;
     protected int salesPersonID;
     protected Date date;
+
+    public static final String TABLE_NAME = "transaction";
 
     public Transaction() {
         super();
@@ -16,6 +19,24 @@ public class Transaction extends BaseModel {
         this.partID = partID;
         this.salesPersonID = salesPersonID;
         this.date = date;
+    }
+
+    public static enum ColumnKey {
+        ID("tID"),
+        PART_ID("pID"),
+        SALES_PERSON_ID("sID"),
+        DATE("tDate");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return key;
+        }
     }
 
     public int getPartID() {
@@ -40,5 +61,22 @@ public class Transaction extends BaseModel {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getDateString() {
+        return getDateFormat().format(this.date);
+    }
+
+    public static Transaction parseString(String rawString) throws IllegalArgumentException, ParseException {
+        String[] record = rawString.split("\t");
+        if (record.length != 4) {
+            throw new IllegalArgumentException(
+                    "Invalid number of entries, expected: 4, actual: " + record.length);
+        }
+        return new Transaction(
+                Integer.parseInt(record[0]),
+                Integer.parseInt(record[1]),
+                Integer.parseInt(record[2]),
+                new Date(getDateFormat().parse(record[3]).getTime()));
     }
 }

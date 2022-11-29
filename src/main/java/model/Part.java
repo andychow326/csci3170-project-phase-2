@@ -8,6 +8,8 @@ public class Part extends BaseModel {
     protected int warrantyPeriod;
     protected int availableQuantity;
 
+    public static final String TABLE_NAME = "part";
+
     public Part() {
         super();
     }
@@ -26,6 +28,27 @@ public class Part extends BaseModel {
         this.manufacturerID = manufacturerID;
         this.categoryID = categoryID;
         this.warrantyPeriod = warrantyPeriod;
+    }
+
+    public static enum ColumnKey {
+        ID("pID"),
+        NAME("pName"),
+        PRICE("pPrice"),
+        MANUFACTURER_ID("mID"),
+        CATEGORY_ID("cID"),
+        WRANS_PERIOD("pWarrantyPeriod"),
+        AVAILABLE_QUANTITY("pAvailableQuantity");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return key;
+        }
     }
 
     public String getName() {
@@ -74,5 +97,21 @@ public class Part extends BaseModel {
 
     public void setAvailableQuantity(int availableQuantity) {
         this.availableQuantity = availableQuantity;
+    }
+
+    public static Part parseString(String rawString) throws IllegalArgumentException {
+        String[] record = rawString.split("\t");
+        if (record.length != 7) {
+            throw new IllegalArgumentException(
+                    "Invalid number of entries, expected: 7, actual: " + record.length);
+        }
+        return new Part(
+                Integer.parseInt(record[0]),
+                record[1],
+                Integer.parseInt(record[2]),
+                Integer.parseInt(record[3]),
+                Integer.parseInt(record[4]),
+                Integer.parseInt(record[5]),
+                Integer.parseInt(record[6]));
     }
 }

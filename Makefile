@@ -31,7 +31,7 @@ build: ./src/main/resources/config.properties ./src/main/resources/schema.sql ./
 	@make clean
 	@$(JAVAC) -d ./target/classes ./src/main/java/**/*.java
 	@cp ./src/main/resources/config.properties ./target/classes/
-	@cp ./src/main/resources/* ./target/classes/
+	@cp -r ./src/main/resources/* ./target/classes/
 	@printf "Done!\n"
 
 .PHONY: start

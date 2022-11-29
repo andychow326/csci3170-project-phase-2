@@ -15,12 +15,31 @@ public class CategoryDaoImpl extends DaoImpl implements CategoryDao {
     }
 
     @Override
-    public int add(Category category) throws SQLException {
+    public PreparedStatement getAddStatement() throws SQLException {
         String query = "INSERT INTO category (cID, cName) VALUES (?, ?)";
-        PreparedStatement ps = conn.prepareStatement(query);
+        return conn.prepareStatement(query);
+    }
+
+    private PreparedStatement addCategory(PreparedStatement ps, Category category) throws SQLException {
         ps.setInt(1, category.getID());
         ps.setString(2, category.getName());
-        return ps.executeUpdate();
+        return ps;
+    }
+
+    @Override
+    public int add(Category category) throws SQLException {
+        PreparedStatement ps = getAddStatement();
+        return addCategory(ps, category).executeUpdate();
+    }
+
+    @Override
+    public int[] addAll(List<Category> categories) throws SQLException {
+        PreparedStatement ps = getAddStatement();
+        for (Category category : categories) {
+            ps = addCategory(ps, category);
+            ps.addBatch();
+        }
+        return ps.executeBatch();
     }
 
     @Override
@@ -50,7 +69,7 @@ public class CategoryDaoImpl extends DaoImpl implements CategoryDao {
 
     @Override
     public List<Category> getAllCategories() throws SQLException {
-        String query = "SELECT * FROM category";
+        String query = "SELECT * FROM category " + getQuerySuffix();
         PreparedStatement ps = conn.prepareStatement(query);
 
         ResultSet rs = ps.executeQuery();
