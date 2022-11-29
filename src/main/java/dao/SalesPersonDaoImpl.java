@@ -78,7 +78,7 @@ public class SalesPersonDaoImpl extends DaoImpl implements SalesPersonDao {
 
     @Override
     public List<SalesPerson> getAllSalesPersons() throws SQLException {
-        String query = "SELECT * FROM salesperson";
+        String query = "SELECT * FROM salesperson " + getQuerySuffix();
         PreparedStatement ps = conn.prepareStatement(query);
 
         ResultSet rs = ps.executeQuery();

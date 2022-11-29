@@ -76,7 +76,7 @@ public class ManufacturerDaoImpl extends DaoImpl implements ManufacturerDao {
 
     @Override
     public List<Manufacturer> getAllManufacturers() throws SQLException {
-        String query = "SELECT * FROM manufacturer";
+        String query = "SELECT * FROM manufacturer " + getQuerySuffix();
         PreparedStatement ps = conn.prepareStatement(query);
 
         ResultSet rs = ps.executeQuery();

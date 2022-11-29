@@ -76,7 +76,7 @@ public class TransactionDaoImpl extends DaoImpl implements TransactionDao {
 
     @Override
     public List<Transaction> getAllTransactions() throws SQLException {
-        String query = "SELECT * FROM transaction";
+        String query = "SELECT * FROM transaction " + getQuerySuffix();
         PreparedStatement ps = conn.prepareStatement(query);
 
         ResultSet rs = ps.executeQuery();

@@ -80,7 +80,7 @@ public class PartDaoImpl extends DaoImpl implements PartDao {
 
     @Override
     public List<Part> getAllParts() throws SQLException {
-        String query = "SELECT * FROM part";
+        String query = "SELECT * FROM part " + getQuerySuffix();
         PreparedStatement ps = conn.prepareStatement(query);
 
         ResultSet rs = ps.executeQuery();

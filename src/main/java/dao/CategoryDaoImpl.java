@@ -69,7 +69,7 @@ public class CategoryDaoImpl extends DaoImpl implements CategoryDao {
 
     @Override
     public List<Category> getAllCategories() throws SQLException {
-        String query = "SELECT * FROM category";
+        String query = "SELECT * FROM category " + getQuerySuffix();
         PreparedStatement ps = conn.prepareStatement(query);
 
         ResultSet rs = ps.executeQuery();
