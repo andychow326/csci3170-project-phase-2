@@ -37,7 +37,7 @@ import java.text.ParseException;
 public class AdministratorOperation {
     private BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
     private DatabaseClient db;
-    public Connection conn;
+    private Connection conn;
 
     static final String[] TABLES = {
             Category.TABLE_NAME,
@@ -50,7 +50,7 @@ public class AdministratorOperation {
     // constructor
     public AdministratorOperation(DatabaseClient dbClient) throws IOException {
         this.db = dbClient;
-        this.conn = dbClient.connection;
+        this.conn = dbClient.getConnection();
         displayAdminMenu();
     }
 
