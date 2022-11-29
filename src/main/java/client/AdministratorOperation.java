@@ -20,11 +20,17 @@ import dao.ManufacturerDaoImpl;
 import dao.PartDaoImpl;
 import dao.SalesPersonDaoImpl;
 import dao.TransactionDaoImpl;
+import dao.Dao.OrderDirection;
 import model.Category;
+import model.CategoryColumnKey;
 import model.Manufacturer;
+import model.ManufacturerColumnKey;
 import model.Part;
+import model.PartColumnKey;
 import model.SalesPerson;
+import model.SalesPersonColumnKey;
 import model.Transaction;
+import model.TransactionColumnKey;
 
 import java.text.ParseException;
 
@@ -315,7 +321,9 @@ public class AdministratorOperation {
             switch (choice) {
                 case "category":
                     CategoryDaoImpl categoryDao = new CategoryDaoImpl(this.conn);
-                    List<Category> categories = categoryDao.getAllCategories();
+                    List<Category> categories = categoryDao
+                            .orderBy(CategoryColumnKey.ID, OrderDirection.ASC)
+                            .getAllCategories();
 
                     System.out.println("| cID | cName |");
                     categories.forEach(
@@ -325,7 +333,9 @@ public class AdministratorOperation {
                     break;
                 case "manufacturer":
                     ManufacturerDaoImpl manufacturerDao = new ManufacturerDaoImpl(this.conn);
-                    List<Manufacturer> manufacturers = manufacturerDao.getAllManufacturers();
+                    List<Manufacturer> manufacturers = manufacturerDao
+                            .orderBy(ManufacturerColumnKey.ID, OrderDirection.ASC)
+                            .getAllManufacturers();
 
                     System.out.println("| mID | mName | mAddress | mPhoneNumber |");
                     manufacturers.forEach(
@@ -338,7 +348,9 @@ public class AdministratorOperation {
                     break;
                 case "part":
                     PartDaoImpl partDaoImpl = new PartDaoImpl(this.conn);
-                    List<Part> parts = partDaoImpl.getAllParts();
+                    List<Part> parts = partDaoImpl
+                            .orderBy(PartColumnKey.ID, OrderDirection.ASC)
+                            .getAllParts();
 
                     System.out.println("| pID | pName | pPrice | mID | cID | pWarrantyPeriod | pAvailableQuantity |");
                     parts.forEach(part -> System.out.printf(
@@ -353,7 +365,9 @@ public class AdministratorOperation {
                     break;
                 case "salesperson":
                     SalesPersonDaoImpl salesPersonDaoImpl = new SalesPersonDaoImpl(this.conn);
-                    List<SalesPerson> salesPersons = salesPersonDaoImpl.getAllSalesPersons();
+                    List<SalesPerson> salesPersons = salesPersonDaoImpl
+                            .orderBy(SalesPersonColumnKey.ID, OrderDirection.ASC)
+                            .getAllSalesPersons();
 
                     System.out.println("| sID | sName | sAddress | sPhoneNumber | sExperience |");
                     salesPersons.forEach(
@@ -367,7 +381,9 @@ public class AdministratorOperation {
                     break;
                 case "transaction":
                     TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
-                    List<Transaction> transactions = transactionDao.getAllTransactions();
+                    List<Transaction> transactions = transactionDao
+                            .orderBy(TransactionColumnKey.ID, OrderDirection.ASC)
+                            .getAllTransactions();
 
                     System.out.println("| tID | pID | sID | tDate |");
                     transactions.forEach(
