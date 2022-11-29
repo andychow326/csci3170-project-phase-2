@@ -60,7 +60,7 @@ public class AdministratorOperation {
         Boolean isExit = false;
         while (!isExit) {
             System.out.println("\n-----Operations for administrator menu-----");
-            System.out.println("\nWhat kinds of operation would you like to perform?");
+            System.out.println("What kinds of operation would you like to perform?");
             System.out.println("1. Create all tables");
             System.out.println("2. Delete all tables");
             System.out.println("3. Load from datafile");
