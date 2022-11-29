@@ -9,7 +9,7 @@ import java.util.List;
 
 import model.Transaction;
 
-public class TransactionDaoImpl extends DaoImpl implements TransactionDao {
+public class TransactionDaoImpl extends DaoImpl<TransactionDaoImpl> implements TransactionDao {
     public TransactionDaoImpl(Connection conn) {
         super(conn);
     }

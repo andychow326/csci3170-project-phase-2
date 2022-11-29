@@ -9,7 +9,7 @@ import java.util.List;
 
 import model.Category;
 
-public class CategoryDaoImpl extends DaoImpl implements CategoryDao {
+public class CategoryDaoImpl extends DaoImpl<CategoryDaoImpl> implements CategoryDao {
     public CategoryDaoImpl(Connection conn) {
         super(conn);
     }

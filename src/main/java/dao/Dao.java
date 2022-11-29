@@ -1,6 +1,8 @@
 package dao;
 
-public interface Dao {
+import model.ColumnKey;
+
+public interface Dao<T> {
     public String getQuerySuffix();
 
     public void addQuerySuffix(String suffix);
@@ -10,5 +12,5 @@ public interface Dao {
         DESC
     }
 
-    public void orderBy(String column, OrderDirection direction);
+    public T orderBy(ColumnKey column, OrderDirection direction);
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 import model.SalesPerson;
 
-public class SalesPersonDaoImpl extends DaoImpl implements SalesPersonDao {
+public class SalesPersonDaoImpl extends DaoImpl<SalesPersonDaoImpl> implements SalesPersonDao {
     public SalesPersonDaoImpl(Connection conn) {
         super(conn);
     }

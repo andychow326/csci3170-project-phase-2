@@ -8,7 +8,7 @@ import java.util.List;
 
 import model.Part;
 
-public class PartDaoImpl extends DaoImpl implements PartDao {
+public class PartDaoImpl extends DaoImpl<PartDaoImpl> implements PartDao {
     public PartDaoImpl(Connection conn) {
         super(conn);
     }

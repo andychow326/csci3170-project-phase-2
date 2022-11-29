@@ -9,7 +9,7 @@ import java.util.List;
 
 import model.Manufacturer;
 
-public class ManufacturerDaoImpl extends DaoImpl implements ManufacturerDao {
+public class ManufacturerDaoImpl extends DaoImpl<ManufacturerDaoImpl> implements ManufacturerDao {
     public ManufacturerDaoImpl(Connection conn) {
         super(conn);
     }
