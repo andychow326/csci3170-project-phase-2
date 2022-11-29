@@ -93,6 +93,8 @@ public class Migrator {
             }
         }
 
+        schemaReader.close();
+
         return statement;
     }
 
