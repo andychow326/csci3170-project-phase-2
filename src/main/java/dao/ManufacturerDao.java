@@ -1,12 +1,17 @@
 package dao;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
 import model.Manufacturer;
 
 public interface ManufacturerDao {
+    public PreparedStatement getAddStatement() throws SQLException;
+
     public int add(Manufacturer manufacturer) throws SQLException;
+
+    public int[] addAll(List<Manufacturer> manufacturers) throws SQLException;
 
     public void delete(int id) throws SQLException;
 

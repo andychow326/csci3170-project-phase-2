@@ -15,16 +15,36 @@ public class ManufacturerDaoImpl extends DaoImpl implements ManufacturerDao {
     }
 
     @Override
-    public int add(Manufacturer manufacturer) throws SQLException {
+    public PreparedStatement getAddStatement() throws SQLException {
         String query = "INSERT INTO "
                 + "manufacturer (mID, mName, mAddress, mPhoneNumber) "
                 + "VALUES (?, ?, ?, ?)";
-        PreparedStatement ps = conn.prepareStatement(query);
+        return conn.prepareStatement(query);
+    }
+
+    private PreparedStatement addManufacturer(PreparedStatement ps, Manufacturer manufacturer) throws SQLException {
         ps.setInt(1, manufacturer.getID());
         ps.setString(2, manufacturer.getName());
         ps.setString(3, manufacturer.getAddress());
         ps.setInt(4, manufacturer.getPhoneNumber());
-        return ps.executeUpdate();
+        return ps;
+    }
+
+    @Override
+    public int add(Manufacturer manufacturer) throws SQLException {
+        PreparedStatement ps = getAddStatement();
+        return addManufacturer(ps, manufacturer).executeUpdate();
+    }
+
+    @Override
+    public int[] addAll(List<Manufacturer> manufacturers) throws SQLException {
+        PreparedStatement ps = getAddStatement();
+
+        for (Manufacturer manufacturer : manufacturers) {
+            ps = addManufacturer(ps, manufacturer);
+            ps.addBatch();
+        }
+        return ps.executeBatch();
     }
 
     @Override

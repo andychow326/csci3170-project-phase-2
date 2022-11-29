@@ -1,12 +1,17 @@
 package dao;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
 import model.Category;
 
 public interface CategoryDao {
+    public PreparedStatement getAddStatement() throws SQLException;
+
     public int add(Category category) throws SQLException;
+
+    public int[] addAll(List<Category> categories) throws SQLException;
 
     public void delete(int id) throws SQLException;
 
