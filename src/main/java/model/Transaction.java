@@ -8,6 +8,8 @@ public class Transaction extends BaseModel {
     protected int salesPersonID;
     protected Date date;
 
+    public static final String TABLE_NAME = "transaction";
+
     public Transaction() {
         super();
     }
@@ -17,6 +19,24 @@ public class Transaction extends BaseModel {
         this.partID = partID;
         this.salesPersonID = salesPersonID;
         this.date = date;
+    }
+
+    public static enum ColumnKey {
+        ID("tID"),
+        PART_ID("pID"),
+        SALES_PERSON_ID("sID"),
+        DATE("tDate");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return key;
+        }
     }
 
     public int getPartID() {
@@ -41,6 +61,10 @@ public class Transaction extends BaseModel {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getDateString() {
+        return getDateFormat().format(this.date);
     }
 
     public static Transaction parseString(String rawString) throws IllegalArgumentException, ParseException {

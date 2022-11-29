@@ -6,6 +6,8 @@ public class SalesPerson extends BaseModel {
     protected int phoneNumber;
     protected int experience;
 
+    public static final String TABLE_NAME = "salesperson";
+
     public SalesPerson() {
         super();
     }
@@ -21,6 +23,24 @@ public class SalesPerson extends BaseModel {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.experience = experience;
+    }
+
+    public static enum ColumnKey {
+        ID("sID"),
+        NAME("sName"),
+        ADDRESS("sAddress"),
+        PHONE_NUMBER("sPhoneNumber");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return key;
+        }
     }
 
     public String getName() {

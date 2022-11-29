@@ -5,6 +5,8 @@ public class Manufacturer extends BaseModel {
     protected String address;
     protected int phoneNumber;
 
+    public static final String TABLE_NAME = "manufacturer";
+
     public Manufacturer() {
         super();
     }
@@ -18,6 +20,24 @@ public class Manufacturer extends BaseModel {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
+    }
+
+    public static enum ColumnKey {
+        ID("mID"),
+        NAME("mName"),
+        ADDRESS("mAddress"),
+        PHONE_NUMBER("mPhoneNumber");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return key;
+        }
     }
 
     public String getName() {

@@ -3,6 +3,8 @@ package model;
 public class Category extends BaseModel {
     protected String name;
 
+    public static final String TABLE_NAME = "category";
+
     public Category() {
         super();
     }
@@ -10,6 +12,22 @@ public class Category extends BaseModel {
     public Category(int id, String name) {
         super(id);
         this.name = name;
+    }
+
+    public static enum ColumnKey {
+        ID("cID"),
+        NAME("cName");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return key;
+        }
     }
 
     public String getName() {
