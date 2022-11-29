@@ -54,4 +54,18 @@ public class SalesPerson extends BaseModel {
     public void setExperience(int experience) {
         this.experience = experience;
     }
+
+    public static SalesPerson parseString(String rawString) throws IllegalArgumentException {
+        String[] record = rawString.split("\t");
+        if (record.length != 5) {
+            throw new IllegalArgumentException(
+                    "Invalid number of entries, expected: 5, actual: " + record.length);
+        }
+        return new SalesPerson(
+                Integer.parseInt(record[0]),
+                record[1],
+                record[2],
+                Integer.parseInt(record[3]),
+                Integer.parseInt(record[4]));
+    }
 }

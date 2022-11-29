@@ -75,4 +75,20 @@ public class Part extends BaseModel {
     public void setAvailableQuantity(int availableQuantity) {
         this.availableQuantity = availableQuantity;
     }
+
+    public static Part parseString(String rawString) throws IllegalArgumentException {
+        String[] record = rawString.split("\t");
+        if (record.length != 7) {
+            throw new IllegalArgumentException(
+                    "Invalid number of entries, expected: 7, actual: " + record.length);
+        }
+        return new Part(
+                Integer.parseInt(record[0]),
+                record[1],
+                Integer.parseInt(record[2]),
+                Integer.parseInt(record[3]),
+                Integer.parseInt(record[4]),
+                Integer.parseInt(record[5]),
+                Integer.parseInt(record[6]));
+    }
 }

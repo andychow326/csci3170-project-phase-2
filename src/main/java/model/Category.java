@@ -19,4 +19,13 @@ public class Category extends BaseModel {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static Category parseString(String rawString) throws IllegalArgumentException {
+        String[] record = rawString.split("\t");
+        if (record.length != 2) {
+            throw new IllegalArgumentException(
+                    "Invalid number of entries, expected: 2, actual: " + record.length);
+        }
+        return new Category(Integer.parseInt(record[0]), record[1]);
+    }
 }
