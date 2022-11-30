@@ -6,9 +6,11 @@ import java.io.IOException;
 
 import client.DatabaseClient;
 import dao.SalespersonDaoImpl;
+import dao.SalespersonRelationalDaoImpl;
 import dao.Dao.OrderDirection;
 import model.Salesperson;
 import model.SalespersonColumnKey;
+import model.SalespersonRelational;
 
 public class ManagerOperation extends BaseOperation {
     // constructor
@@ -120,6 +122,27 @@ public class ManagerOperation extends BaseOperation {
     }
 
     private void countTransactionRecordsByExperience() throws SQLException, IOException {
+        System.out.print("Type in the lower bound for years of experience: ");
+        int lowerBound = getInputInteger();
+        System.out.print("Type in the upper bound for years of experience: ");
+        int upperBound = getInputInteger();
+
+        SalespersonRelationalDaoImpl salespersonRelationalDao = new SalespersonRelationalDaoImpl(this.conn);
+        List<SalespersonRelational> salespersons = salespersonRelationalDao
+                .orderBy(SalespersonColumnKey.ID, OrderDirection.DESC)
+                .getAllSalespersonsByExperienceRangeWithTransactionCount(
+                        lowerBound, upperBound);
+
+        System.out.println("Transaction Record:");
+        System.out.println("| ID | Name | Years of Experience | Number of Transaction |");
+        salespersons.forEach(
+                saleperson -> System.out.printf(
+                        "| %d | %s | %d | %d |\n",
+                        saleperson.getID(),
+                        saleperson.getName(),
+                        saleperson.getExperience(),
+                        saleperson.getTransactionCount()));
+        System.out.println("End of Query");
     }
 
     private void showTotalSalesValueOfEachManufacturer() throws SQLException, IOException {
