@@ -53,7 +53,7 @@ public class ManagerOperation extends BaseOperation {
         System.out.print("Enter Your Choice: ");
         boolean isExit = false;
 
-        int choice = getInputOption();
+        int choice = getInputInteger();
         if (choice < 0) {
             return isExit;
         }
@@ -107,7 +107,7 @@ public class ManagerOperation extends BaseOperation {
             System.out.println("2. By descending order");
 
             System.out.print("Choose the list order: ");
-            int choice = getInputOption();
+            int choice = getInputInteger();
             switch (choice) {
                 case 1:
                     return OrderDirection.ASC;

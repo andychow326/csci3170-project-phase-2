@@ -56,7 +56,7 @@ public class SalespersonOperation extends BaseOperation {
         System.out.print("Enter Your Choice: ");
         boolean isExit = false;
 
-        int choice = getInputOption();
+        int choice = getInputInteger();
         if (choice < 0) {
             return isExit;
         }
@@ -95,7 +95,7 @@ public class SalespersonOperation extends BaseOperation {
     private ColumnKey selectSearchPartsCriterion() throws IOException {
         while (true) {
             System.out.print("Choose the search criterion: ");
-            int choice = getInputOption();
+            int choice = getInputInteger();
             switch (choice) {
                 case 1:
                     return PartColumnKey.NAME;
@@ -120,7 +120,7 @@ public class SalespersonOperation extends BaseOperation {
             System.out.println("2. By price, descending order");
 
             System.out.print("Choose the search criterion: ");
-            int choice = getInputOption();
+            int choice = getInputInteger();
             switch (choice) {
                 case 1:
                     return OrderDirection.ASC;
@@ -174,7 +174,7 @@ public class SalespersonOperation extends BaseOperation {
         boolean isExit = false;
         while (!isExit) {
             System.out.print("Enter The Part ID: ");
-            input = getInputOption();
+            input = getInputInteger();
             if (input >= 0) {
                 isExit = true;
             }
@@ -187,7 +187,7 @@ public class SalespersonOperation extends BaseOperation {
         boolean isExit = false;
         while (!isExit) {
             System.out.print("Enter The Salesperson ID: ");
-            input = getInputOption();
+            input = getInputInteger();
             if (input >= 0) {
                 isExit = true;
             }

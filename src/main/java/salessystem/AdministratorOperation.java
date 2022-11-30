@@ -73,7 +73,7 @@ public class AdministratorOperation extends BaseOperation {
         System.out.print("Enter Your Choice: ");
         boolean isExit = false;
 
-        int choice = getInputOption();
+        int choice = getInputInteger();
         if (choice < 0) {
             return isExit;
         }

@@ -39,7 +39,7 @@ public class BaseOperation {
         return s.matches("^[0-9]*$");
     }
 
-    public static int getInputOption() throws IOException {
+    public static int getInputInteger() throws IOException {
         int choice;
         try {
             String input = inputReader.readLine();
