@@ -33,4 +33,31 @@ public class DaoImpl<T> implements Dao<T> {
         this.addQuerySuffix(direction.name());
         return (T) this;
     }
+
+    // The unchecked warning is ignored assuming casting is valid
+    @SuppressWarnings("unchecked")
+    @Override
+    public T where(ColumnKey column) {
+        this.addQuerySuffix("WHERE");
+        this.addQuerySuffix(column.toString());
+        return (T) this;
+    }
+
+    // The unchecked warning is ignored assuming casting is valid
+    @SuppressWarnings("unchecked")
+    @Override
+    public T equals(String value) {
+        this.addQuerySuffix("=");
+        this.addQuerySuffix("'" + value + "'");
+        return (T) this;
+    }
+
+    // The unchecked warning is ignored assuming casting is valid
+    @SuppressWarnings("unchecked")
+    @Override
+    public T like(String value) {
+        this.addQuerySuffix("LIKE");
+        this.addQuerySuffix("'%" + value + "%'");
+        return (T) this;
+    }
 }

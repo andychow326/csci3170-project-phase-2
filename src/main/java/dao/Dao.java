@@ -13,4 +13,10 @@ public interface Dao<T> {
     }
 
     public T orderBy(ColumnKey column, OrderDirection direction);
+
+    public T where(ColumnKey column);
+
+    public T equals(String value);
+
+    public T like(String value);
 }
