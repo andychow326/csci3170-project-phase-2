@@ -1,14 +1,16 @@
 package salessystem;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.io.IOException;
 
 import client.DatabaseClient;
+import dao.PartRelationalDaoImpl;
 import dao.Dao.OrderDirection;
-import model.Manufacturer;
+import model.ColumnKey;
 import model.ManufacturerColumnKey;
-import model.Part;
 import model.PartColumnKey;
+import model.PartRelational;
 
 public class SalesPersonOperation extends BaseOperation {
     // constructor
@@ -66,41 +68,42 @@ public class SalesPersonOperation extends BaseOperation {
     }
 
     private void searchPartsOption() {
-        String criterion;
+        ColumnKey criterion;
         String criterionValue;
         OrderDirection order;
-        while (true) {
-            System.out.println("Choose the Search Criterion:");
-            System.out.println("1. Part Name");
-            System.out.println("2. Manufacturer Name");
+        System.out.println("Choose the Search Criterion:");
+        System.out.println("1. Part Name");
+        System.out.println("2. Manufacturer Name");
 
-            try {
-                criterion = selectSearchPartsCriterion();
-                if (criterion.isEmpty()) {
-                    continue;
-                }
-                criterionValue = enterSearchPartsKeyword();
-                if (criterionValue == null) {
-                    continue;
-                }
-                order = getSearchPartsOrder();
-
-            } catch (IOException e) {
-
-            }
+        try {
+            criterion = selectSearchPartsCriterion();
+            criterionValue = enterSearchPartsKeyword();
+            order = getSearchPartsOrder();
+            showSearchPartsContent(criterion, criterionValue, order);
+        } catch (SQLException e) {
+            System.out.println("Error excecuting SQL query");
+            System.out.println("Error code: " + e.getErrorCode());
+            System.out.println("SQL state: " + e.getSQLState());
+            System.out.println("Message: " + e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("I/O Error");
+            e.printStackTrace();
         }
     }
 
-    private String selectSearchPartsCriterion() throws IOException {
-        System.out.print("Choose the search criterion: ");
-        int choice = getInputOption();
-        switch (choice) {
-            case 1:
-                return String.join(".", Part.TABLE_NAME, PartColumnKey.NAME.toString());
-            case 2:
-                return String.join(".", Manufacturer.TABLE_NAME, ManufacturerColumnKey.NAME.toString());
-            default:
-                return "";
+    private ColumnKey selectSearchPartsCriterion() throws IOException {
+        while (true) {
+            System.out.print("Choose the search criterion: ");
+            int choice = getInputOption();
+            switch (choice) {
+                case 1:
+                    return PartColumnKey.NAME;
+                case 2:
+                    return ManufacturerColumnKey.NAME;
+                default:
+                    System.out.println("Invalid Choice");
+            }
         }
     }
 
@@ -125,7 +128,7 @@ public class SalesPersonOperation extends BaseOperation {
                     case 2:
                         return OrderDirection.DESC;
                     default:
-                        return null;
+                        System.out.println("Invalid Choice");
                 }
 
             } catch (IOException e) {
@@ -134,7 +137,29 @@ public class SalesPersonOperation extends BaseOperation {
         }
     }
 
-    private void sellPartsOption() {
+    private void showSearchPartsContent(ColumnKey searchKey, String searchValue, OrderDirection order)
+            throws SQLException {
+        PartRelationalDaoImpl partRelationalDao = new PartRelationalDaoImpl(this.conn);
+        List<PartRelational> parts = partRelationalDao
+                .where(searchKey)
+                .like(searchValue)
+                .orderBy(PartColumnKey.PRICE, order)
+                .getAllParts();
 
+        System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty | Price |");
+        parts.forEach(
+                part -> System.out.printf(
+                        "| %d | %s | %s | %s | %d | %d | %d |\n",
+                        part.getID(),
+                        part.getName(),
+                        part.getManufacturer().getName(),
+                        part.getCategory().getName(),
+                        part.getAvailableQuantity(),
+                        part.getWarrantyPeriod(),
+                        part.getPrice()));
+        System.out.println("End of Query");
+    }
+
+    private void sellPartsOption() {
     }
 }
