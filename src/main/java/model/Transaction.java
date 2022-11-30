@@ -5,7 +5,7 @@ import java.text.ParseException;
 
 public class Transaction extends BaseModel {
     protected int partID;
-    protected int salesPersonID;
+    protected int salespersonID;
     protected Date date;
 
     public static final String TABLE_NAME = "transaction";
@@ -14,10 +14,10 @@ public class Transaction extends BaseModel {
         super();
     }
 
-    public Transaction(int id, int partID, int salesPersonID, Date date) {
+    public Transaction(int id, int partID, int salespersonID, Date date) {
         super(id);
         this.partID = partID;
-        this.salesPersonID = salesPersonID;
+        this.salespersonID = salespersonID;
         this.date = date;
     }
 
@@ -29,12 +29,12 @@ public class Transaction extends BaseModel {
         this.partID = partID;
     }
 
-    public int getSalesPersonID() {
-        return this.salesPersonID;
+    public int getSalespersonID() {
+        return this.salespersonID;
     }
 
-    public void setSalesPersonID(int salesPersonID) {
-        this.salesPersonID = salesPersonID;
+    public void setSalespersonID(int salespersonID) {
+        this.salespersonID = salespersonID;
     }
 
     public Date getDate() {

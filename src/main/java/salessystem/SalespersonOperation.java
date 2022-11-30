@@ -18,9 +18,9 @@ import model.PartRelational;
 import model.Transaction;
 import model.TransactionColumnKey;
 
-public class SalesPersonOperation extends BaseOperation {
+public class SalespersonOperation extends BaseOperation {
     // constructor
-    public SalesPersonOperation(DatabaseClient dbClient) {
+    public SalespersonOperation(DatabaseClient dbClient) {
         super(dbClient);
     }
 

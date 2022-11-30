@@ -1,6 +1,6 @@
 package model;
 
-public class SalesPerson extends BaseModel {
+public class Salesperson extends BaseModel {
     protected String name;
     protected String address;
     protected int phoneNumber;
@@ -8,11 +8,11 @@ public class SalesPerson extends BaseModel {
 
     public static final String TABLE_NAME = "salesperson";
 
-    public SalesPerson() {
+    public Salesperson() {
         super();
     }
 
-    public SalesPerson(
+    public Salesperson(
             int id,
             String name,
             String address,
@@ -57,13 +57,13 @@ public class SalesPerson extends BaseModel {
         this.experience = experience;
     }
 
-    public static SalesPerson parseString(String rawString) throws IllegalArgumentException {
+    public static Salesperson parseString(String rawString) throws IllegalArgumentException {
         String[] record = rawString.split("\t");
         if (record.length != 5) {
             throw new IllegalArgumentException(
                     "Invalid number of entries, expected: 5, actual: " + record.length);
         }
-        return new SalesPerson(
+        return new Salesperson(
                 Integer.parseInt(record[0]),
                 record[1],
                 record[2],

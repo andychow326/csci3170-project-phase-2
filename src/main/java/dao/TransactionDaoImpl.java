@@ -25,7 +25,7 @@ public class TransactionDaoImpl extends DaoImpl<TransactionDaoImpl> implements T
     private PreparedStatement addTransaction(PreparedStatement ps, Transaction transaction) throws SQLException {
         ps.setInt(1, transaction.getID());
         ps.setInt(2, transaction.getPartID());
-        ps.setInt(3, transaction.getSalesPersonID());
+        ps.setInt(3, transaction.getSalespersonID());
         ps.setDate(4, transaction.getDate());
         return ps;
     }
@@ -66,7 +66,7 @@ public class TransactionDaoImpl extends DaoImpl<TransactionDaoImpl> implements T
         if (rs.next()) {
             transaction.setID(rs.getInt("tID"));
             transaction.setPartID(rs.getInt("pID"));
-            transaction.setSalesPersonID(rs.getInt("sID"));
+            transaction.setSalespersonID(rs.getInt("sID"));
             transaction.setDate(rs.getDate("tDate"));
             return transaction;
         }
@@ -85,7 +85,7 @@ public class TransactionDaoImpl extends DaoImpl<TransactionDaoImpl> implements T
             Transaction transaction = new Transaction();
             transaction.setID(rs.getInt("tID"));
             transaction.setPartID(rs.getInt("pID"));
-            transaction.setSalesPersonID(rs.getInt("sID"));
+            transaction.setSalespersonID(rs.getInt("sID"));
             transaction.setDate(rs.getDate("tDate"));
             transactions.add(transaction);
         }
@@ -98,7 +98,7 @@ public class TransactionDaoImpl extends DaoImpl<TransactionDaoImpl> implements T
         String query = "UPDATE transaction SET pID =?, sID =?, tDate =? WHERE tID =?";
         PreparedStatement ps = conn.prepareStatement(query);
         ps.setInt(1, part.getPartID());
-        ps.setInt(2, part.getSalesPersonID());
+        ps.setInt(2, part.getSalespersonID());
         ps.setDate(3, part.getDate());
         ps.setInt(4, part.getID());
         ps.executeUpdate();

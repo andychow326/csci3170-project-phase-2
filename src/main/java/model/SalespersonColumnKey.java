@@ -1,6 +1,6 @@
 package model;
 
-public enum SalesPersonColumnKey implements ColumnKey {
+public enum SalespersonColumnKey implements ColumnKey {
     ID("sID"),
     NAME("sName"),
     ADDRESS("sAddress"),
@@ -9,7 +9,7 @@ public enum SalesPersonColumnKey implements ColumnKey {
 
     private final String key;
 
-    SalesPersonColumnKey(String key) {
+    SalespersonColumnKey(String key) {
         this.key = key;
     }
 

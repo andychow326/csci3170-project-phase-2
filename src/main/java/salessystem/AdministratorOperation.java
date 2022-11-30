@@ -17,7 +17,7 @@ import client.DatabaseClient;
 import dao.CategoryDaoImpl;
 import dao.ManufacturerDaoImpl;
 import dao.PartDaoImpl;
-import dao.SalesPersonDaoImpl;
+import dao.SalespersonDaoImpl;
 import dao.TransactionDaoImpl;
 import dao.Dao.OrderDirection;
 import model.Category;
@@ -26,8 +26,8 @@ import model.Manufacturer;
 import model.ManufacturerColumnKey;
 import model.Part;
 import model.PartColumnKey;
-import model.SalesPerson;
-import model.SalesPersonColumnKey;
+import model.Salesperson;
+import model.SalespersonColumnKey;
 import model.Transaction;
 import model.TransactionColumnKey;
 
@@ -187,7 +187,7 @@ public class AdministratorOperation extends BaseOperation {
                 insertPartDataFromFile(file.getPath());
                 break;
             case "salesperson.txt":
-                insertSalesPersonDataFromFile(file.getPath());
+                insertSalespersonDataFromFile(file.getPath());
                 break;
             case "transaction.txt":
                 insertTransactionDataFromFile(file.getPath());
@@ -248,9 +248,9 @@ public class AdministratorOperation extends BaseOperation {
         partDaoImpl.addAll(parts);
     }
 
-    private void insertSalesPersonDataFromFile(String filepath) throws SQLException, IOException {
-        SalesPersonDaoImpl salesPersonDaoImpl = new SalesPersonDaoImpl(this.conn);
-        List<SalesPerson> salesPersons = new ArrayList<SalesPerson>();
+    private void insertSalespersonDataFromFile(String filepath) throws SQLException, IOException {
+        SalespersonDaoImpl salespersonDaoImpl = new SalespersonDaoImpl(this.conn);
+        List<Salesperson> salespersons = new ArrayList<Salesperson>();
 
         String line;
         try (
@@ -258,11 +258,11 @@ public class AdministratorOperation extends BaseOperation {
                 InputStreamReader inputReader = new InputStreamReader(fs);
                 BufferedReader fileReader = new BufferedReader(inputReader);) {
             while ((line = fileReader.readLine()) != null) {
-                SalesPerson salesPerson = SalesPerson.parseString(line);
-                salesPersons.add(salesPerson);
+                Salesperson salesperson = Salesperson.parseString(line);
+                salespersons.add(salesperson);
             }
         }
-        salesPersonDaoImpl.addAll(salesPersons);
+        salespersonDaoImpl.addAll(salespersons);
     }
 
     private void insertTransactionDataFromFile(String filepath) throws SQLException, IOException {
@@ -344,20 +344,20 @@ public class AdministratorOperation extends BaseOperation {
                             part.getAvailableQuantity()));
                     break;
                 case "salesperson":
-                    SalesPersonDaoImpl salesPersonDaoImpl = new SalesPersonDaoImpl(this.conn);
-                    List<SalesPerson> salesPersons = salesPersonDaoImpl
-                            .orderBy(SalesPersonColumnKey.ID, OrderDirection.ASC)
-                            .getAllSalesPersons();
+                    SalespersonDaoImpl salespersonDaoImpl = new SalespersonDaoImpl(this.conn);
+                    List<Salesperson> salespersons = salespersonDaoImpl
+                            .orderBy(SalespersonColumnKey.ID, OrderDirection.ASC)
+                            .getAllSalespersons();
 
                     System.out.println("| sID | sName | sAddress | sPhoneNumber | sExperience |");
-                    salesPersons.forEach(
-                            salesPerson -> System.out.printf(
+                    salespersons.forEach(
+                            salesperson -> System.out.printf(
                                     "| %d | %s | %s | %d | %d\n",
-                                    salesPerson.getID(),
-                                    salesPerson.getName(),
-                                    salesPerson.getAddress(),
-                                    salesPerson.getPhoneNumber(),
-                                    salesPerson.getExperience()));
+                                    salesperson.getID(),
+                                    salesperson.getName(),
+                                    salesperson.getAddress(),
+                                    salesperson.getPhoneNumber(),
+                                    salesperson.getExperience()));
                     break;
                 case "transaction":
                     TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
@@ -371,7 +371,7 @@ public class AdministratorOperation extends BaseOperation {
                                     "| %d | %d | %d | %s |\n",
                                     transaction.getID(),
                                     transaction.getPartID(),
-                                    transaction.getSalesPersonID(),
+                                    transaction.getSalespersonID(),
                                     transaction.getDateString()));
                     break;
             }

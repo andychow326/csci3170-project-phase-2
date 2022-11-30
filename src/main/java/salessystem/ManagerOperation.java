@@ -5,10 +5,10 @@ import java.util.List;
 import java.io.IOException;
 
 import client.DatabaseClient;
-import dao.SalesPersonDaoImpl;
+import dao.SalespersonDaoImpl;
 import dao.Dao.OrderDirection;
-import model.SalesPerson;
-import model.SalesPersonColumnKey;
+import model.Salesperson;
+import model.SalespersonColumnKey;
 
 public class ManagerOperation extends BaseOperation {
     // constructor
@@ -84,10 +84,10 @@ public class ManagerOperation extends BaseOperation {
 
     private void listAllSalespersonsByExperience() throws SQLException, IOException {
         OrderDirection order = getListingOrder();
-        SalesPersonDaoImpl salesPersonDao = new SalesPersonDaoImpl(this.conn);
-        List<SalesPerson> salespersons = salesPersonDao
-                .orderBy(SalesPersonColumnKey.EXPERIENCE, order)
-                .getAllSalesPersons();
+        SalespersonDaoImpl salespersonDao = new SalespersonDaoImpl(this.conn);
+        List<Salesperson> salespersons = salespersonDao
+                .orderBy(SalespersonColumnKey.EXPERIENCE, order)
+                .getAllSalespersons();
 
         System.out.println("| ID | Name | Mobile Phone | Years of Experience |");
         salespersons.forEach(
