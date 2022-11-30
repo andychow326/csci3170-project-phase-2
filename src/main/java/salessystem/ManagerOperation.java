@@ -5,10 +5,11 @@ import java.util.List;
 import java.io.IOException;
 
 import client.DatabaseClient;
+import dao.ManufacturerRelationalDaoImpl;
 import dao.SalespersonDaoImpl;
 import dao.SalespersonRelationalDaoImpl;
 import dao.Dao.OrderDirection;
-import model.Manufacturer;
+import model.ManufacturerRelational;
 import model.Salesperson;
 import model.SalespersonRelational;
 
@@ -146,6 +147,17 @@ public class ManagerOperation extends BaseOperation {
     }
 
     private void showTotalSalesValueOfEachManufacturer() throws SQLException, IOException {
+        ManufacturerRelationalDaoImpl manufacturerDao = new ManufacturerRelationalDaoImpl(this.conn);
+        List<ManufacturerRelational> manufacturers = manufacturerDao.getAllManufacturersWithTotalSalesValue();
+
+        System.out.println("| Manufacturer ID | Manufacturer Name | Total Sales Value |");
+        manufacturers.forEach(
+                manufacturer -> System.out.printf(
+                        "| %d | %s | %d |\n",
+                        manufacturer.getID(),
+                        manufacturer.getName(),
+                        manufacturer.getTotalSalesValue()));
+        System.out.println("End of Query");
     }
 
     private void showNMostPopularParts() throws SQLException, IOException {
