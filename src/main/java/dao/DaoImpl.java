@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.ColumnKey;
+import model.BaseColumnKey;
 
 public class DaoImpl<T> implements Dao<T> {
     protected Connection conn;
@@ -39,7 +39,7 @@ public class DaoImpl<T> implements Dao<T> {
     }
 
     @Override
-    public int getNewPrimaryKey(ColumnKey column, String table) throws SQLException {
+    public int getNewPrimaryKey(BaseColumnKey column, String table) throws SQLException {
         String query = "SELECT MAX(" + column.toString() + ") FROM " + table;
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(query);
@@ -50,7 +50,7 @@ public class DaoImpl<T> implements Dao<T> {
     // The unchecked warning is ignored assuming casting is valid
     @SuppressWarnings("unchecked")
     @Override
-    public T orderBy(ColumnKey column, OrderDirection direction) {
+    public T orderBy(BaseColumnKey column, OrderDirection direction) {
         this.addQuerySuffix("ORDER BY");
         this.addQuerySuffix(column.toString());
         this.addQuerySuffix(direction.name());
@@ -60,7 +60,7 @@ public class DaoImpl<T> implements Dao<T> {
     // The unchecked warning is ignored assuming casting is valid
     @SuppressWarnings("unchecked")
     @Override
-    public T where(ColumnKey column) {
+    public T where(BaseColumnKey column) {
         this.addQuerySuffix("WHERE");
         this.addQuerySuffix(column.toString());
         return (T) this;

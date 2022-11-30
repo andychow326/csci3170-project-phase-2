@@ -1,5 +1,5 @@
 package model;
 
-public interface ColumnKey {
+public interface BaseColumnKey {
     String toString();
 }

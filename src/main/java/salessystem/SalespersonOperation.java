@@ -10,13 +10,11 @@ import dao.PartDaoImpl;
 import dao.PartRelationalDaoImpl;
 import dao.TransactionDaoImpl;
 import dao.Dao.OrderDirection;
-import model.ColumnKey;
-import model.ManufacturerColumnKey;
+import model.BaseColumnKey;
+import model.Manufacturer;
 import model.Part;
-import model.PartColumnKey;
 import model.PartRelational;
 import model.Transaction;
-import model.TransactionColumnKey;
 
 public class SalespersonOperation extends BaseOperation {
     // constructor
@@ -79,7 +77,7 @@ public class SalespersonOperation extends BaseOperation {
     }
 
     private void searchPartsOption() throws SQLException, IOException {
-        ColumnKey criterion;
+        BaseColumnKey criterion;
         String criterionValue;
         OrderDirection order;
         System.out.println("Choose the Search Criterion:");
@@ -92,15 +90,15 @@ public class SalespersonOperation extends BaseOperation {
         showSearchPartsContent(criterion, criterionValue, order);
     }
 
-    private ColumnKey selectSearchPartsCriterion() throws IOException {
+    private BaseColumnKey selectSearchPartsCriterion() throws IOException {
         while (true) {
             System.out.print("Choose the search criterion: ");
             int choice = getInputInteger();
             switch (choice) {
                 case 1:
-                    return PartColumnKey.NAME;
+                    return Part.ColumnKey.NAME;
                 case 2:
-                    return ManufacturerColumnKey.NAME;
+                    return Manufacturer.ColumnKey.NAME;
                 default:
                     System.out.println("Invalid Choice");
             }
@@ -132,13 +130,13 @@ public class SalespersonOperation extends BaseOperation {
         }
     }
 
-    private void showSearchPartsContent(ColumnKey searchKey, String searchValue, OrderDirection order)
+    private void showSearchPartsContent(BaseColumnKey searchKey, String searchValue, OrderDirection order)
             throws SQLException {
         PartRelationalDaoImpl partRelationalDao = new PartRelationalDaoImpl(this.conn);
         List<PartRelational> parts = partRelationalDao
                 .where(searchKey)
                 .like(searchValue)
-                .orderBy(PartColumnKey.PRICE, order)
+                .orderBy(Part.ColumnKey.PRICE, order)
                 .getAllParts();
 
         System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty | Price |");
@@ -197,7 +195,7 @@ public class SalespersonOperation extends BaseOperation {
 
     private void sellPart(PartDaoImpl partDao, Part part, int salespersonID) throws SQLException {
         TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
-        int newPrimaryKey = transactionDao.getNewPrimaryKey(TransactionColumnKey.ID, Transaction.TABLE_NAME);
+        int newPrimaryKey = transactionDao.getNewPrimaryKey(Transaction.ColumnKey.ID, Transaction.TABLE_NAME);
         Date currentDate = transactionDao.getCurrentDate();
 
         Transaction transaction = new Transaction(

@@ -21,15 +21,10 @@ import dao.SalespersonDaoImpl;
 import dao.TransactionDaoImpl;
 import dao.Dao.OrderDirection;
 import model.Category;
-import model.CategoryColumnKey;
 import model.Manufacturer;
-import model.ManufacturerColumnKey;
 import model.Part;
-import model.PartColumnKey;
 import model.Salesperson;
-import model.SalespersonColumnKey;
 import model.Transaction;
-import model.TransactionColumnKey;
 
 import java.text.ParseException;
 
@@ -302,7 +297,7 @@ public class AdministratorOperation extends BaseOperation {
                 case "category":
                     CategoryDaoImpl categoryDao = new CategoryDaoImpl(this.conn);
                     List<Category> categories = categoryDao
-                            .orderBy(CategoryColumnKey.ID, OrderDirection.ASC)
+                            .orderBy(Category.ColumnKey.ID, OrderDirection.ASC)
                             .getAllCategories();
 
                     System.out.println("| cID | cName |");
@@ -314,7 +309,7 @@ public class AdministratorOperation extends BaseOperation {
                 case "manufacturer":
                     ManufacturerDaoImpl manufacturerDao = new ManufacturerDaoImpl(this.conn);
                     List<Manufacturer> manufacturers = manufacturerDao
-                            .orderBy(ManufacturerColumnKey.ID, OrderDirection.ASC)
+                            .orderBy(Manufacturer.ColumnKey.ID, OrderDirection.ASC)
                             .getAllManufacturers();
 
                     System.out.println("| mID | mName | mAddress | mPhoneNumber |");
@@ -329,7 +324,7 @@ public class AdministratorOperation extends BaseOperation {
                 case "part":
                     PartDaoImpl partDaoImpl = new PartDaoImpl(this.conn);
                     List<Part> parts = partDaoImpl
-                            .orderBy(PartColumnKey.ID, OrderDirection.ASC)
+                            .orderBy(Part.ColumnKey.ID, OrderDirection.ASC)
                             .getAllParts();
 
                     System.out.println("| pID | pName | pPrice | mID | cID | pWarrantyPeriod | pAvailableQuantity |");
@@ -346,7 +341,7 @@ public class AdministratorOperation extends BaseOperation {
                 case "salesperson":
                     SalespersonDaoImpl salespersonDaoImpl = new SalespersonDaoImpl(this.conn);
                     List<Salesperson> salespersons = salespersonDaoImpl
-                            .orderBy(SalespersonColumnKey.ID, OrderDirection.ASC)
+                            .orderBy(Salesperson.ColumnKey.ID, OrderDirection.ASC)
                             .getAllSalespersons();
 
                     System.out.println("| sID | sName | sAddress | sPhoneNumber | sExperience |");
@@ -362,7 +357,7 @@ public class AdministratorOperation extends BaseOperation {
                 case "transaction":
                     TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
                     List<Transaction> transactions = transactionDao
-                            .orderBy(TransactionColumnKey.ID, OrderDirection.ASC)
+                            .orderBy(Transaction.ColumnKey.ID, OrderDirection.ASC)
                             .getAllTransactions();
 
                     System.out.println("| tID | pID | sID | tDate |");

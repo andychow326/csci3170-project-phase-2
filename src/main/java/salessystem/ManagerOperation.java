@@ -8,8 +8,8 @@ import client.DatabaseClient;
 import dao.SalespersonDaoImpl;
 import dao.SalespersonRelationalDaoImpl;
 import dao.Dao.OrderDirection;
+import model.Manufacturer;
 import model.Salesperson;
-import model.SalespersonColumnKey;
 import model.SalespersonRelational;
 
 public class ManagerOperation extends BaseOperation {
@@ -88,7 +88,7 @@ public class ManagerOperation extends BaseOperation {
         OrderDirection order = getListingOrder();
         SalespersonDaoImpl salespersonDao = new SalespersonDaoImpl(this.conn);
         List<Salesperson> salespersons = salespersonDao
-                .orderBy(SalespersonColumnKey.EXPERIENCE, order)
+                .orderBy(Salesperson.ColumnKey.EXPERIENCE, order)
                 .getAllSalespersons();
 
         System.out.println("| ID | Name | Mobile Phone | Years of Experience |");
@@ -129,7 +129,7 @@ public class ManagerOperation extends BaseOperation {
 
         SalespersonRelationalDaoImpl salespersonRelationalDao = new SalespersonRelationalDaoImpl(this.conn);
         List<SalespersonRelational> salespersons = salespersonRelationalDao
-                .orderBy(SalespersonColumnKey.ID, OrderDirection.DESC)
+                .orderBy(SalespersonRelational.ColumnKey.ID, OrderDirection.DESC)
                 .getAllSalespersonsByExperienceRangeWithTransactionCount(
                         lowerBound, upperBound);
 

@@ -10,6 +10,24 @@ public class Transaction extends BaseModel {
 
     public static final String TABLE_NAME = "transaction";
 
+    public enum ColumnKey implements BaseColumnKey {
+        ID("tID"),
+        PART_ID("pID"),
+        SALES_PERSON_ID("sID"),
+        DATE("tDate");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return Transaction.TABLE_NAME + "." + key;
+        }
+    }
+
     public Transaction() {
         super();
     }

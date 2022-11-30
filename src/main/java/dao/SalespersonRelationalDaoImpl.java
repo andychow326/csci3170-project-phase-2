@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.SalespersonColumnKey;
 import model.SalespersonRelational;
 
 public class SalespersonRelationalDaoImpl extends DaoImpl<SalespersonRelationalDaoImpl>
@@ -35,11 +34,11 @@ public class SalespersonRelationalDaoImpl extends DaoImpl<SalespersonRelationalD
 
         while (rs.next()) {
             SalespersonRelational salesperson = new SalespersonRelational(
-                    rs.getInt(SalespersonColumnKey.ID.toString()),
-                    rs.getString(SalespersonColumnKey.NAME.toString()),
-                    rs.getString(SalespersonColumnKey.ADDRESS.toString()),
-                    rs.getInt(SalespersonColumnKey.PHONE_NUMBER.toString()),
-                    rs.getInt(SalespersonColumnKey.EXPERIENCE.toString()),
+                    rs.getInt(SalespersonRelational.ColumnKey.ID.toString()),
+                    rs.getString(SalespersonRelational.ColumnKey.NAME.toString()),
+                    rs.getString(SalespersonRelational.ColumnKey.ADDRESS.toString()),
+                    rs.getInt(SalespersonRelational.ColumnKey.PHONE_NUMBER.toString()),
+                    rs.getInt(SalespersonRelational.ColumnKey.EXPERIENCE.toString()),
                     rs.getInt("transactionCount"));
             salespersons.add(salesperson);
         }

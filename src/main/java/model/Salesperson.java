@@ -8,6 +8,25 @@ public class Salesperson extends BaseModel {
 
     public static final String TABLE_NAME = "salesperson";
 
+    public enum ColumnKey implements BaseColumnKey {
+        ID("sID"),
+        NAME("sName"),
+        ADDRESS("sAddress"),
+        PHONE_NUMBER("sPhoneNumber"),
+        EXPERIENCE("sExperience");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return Salesperson.TABLE_NAME + "." + key;
+        }
+    }
+
     public Salesperson() {
         super();
     }
