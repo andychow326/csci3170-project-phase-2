@@ -14,6 +14,6 @@ public enum ManufacturerColumnKey implements ColumnKey {
 
     @Override
     public String toString() {
-        return key;
+        return Manufacturer.TABLE_NAME + "." + key;
     }
 }

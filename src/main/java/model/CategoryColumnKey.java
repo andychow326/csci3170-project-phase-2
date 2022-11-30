@@ -12,6 +12,6 @@ public enum CategoryColumnKey implements ColumnKey {
 
     @Override
     public String toString() {
-        return key;
+        return Category.TABLE_NAME + "." + key;
     }
 }

@@ -15,6 +15,6 @@ public enum SalespersonColumnKey implements ColumnKey {
 
     @Override
     public String toString() {
-        return key;
+        return Salesperson.TABLE_NAME + "." + key;
     }
 }

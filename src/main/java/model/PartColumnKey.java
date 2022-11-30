@@ -17,6 +17,6 @@ public enum PartColumnKey implements ColumnKey {
 
     @Override
     public String toString() {
-        return key;
+        return Part.TABLE_NAME + "." + key;
     }
 }

@@ -14,7 +14,7 @@ public enum TransactionColumnKey implements ColumnKey {
 
     @Override
     public String toString() {
-        return key;
+        return Transaction.TABLE_NAME + "." + key;
     }
 
 }
