@@ -1,16 +1,22 @@
 package salessystem;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.io.IOException;
 
 import client.DatabaseClient;
+import dao.PartDaoImpl;
 import dao.PartRelationalDaoImpl;
+import dao.TransactionDaoImpl;
 import dao.Dao.OrderDirection;
 import model.ColumnKey;
 import model.ManufacturerColumnKey;
+import model.Part;
 import model.PartColumnKey;
 import model.PartRelational;
+import model.Transaction;
+import model.TransactionColumnKey;
 
 public class SalesPersonOperation extends BaseOperation {
     // constructor
@@ -60,7 +66,7 @@ public class SalesPersonOperation extends BaseOperation {
                 searchPartsOption();
                 break;
             case 2:
-                sellPartsOption();
+                sellPartOption();
                 break;
             case 3:
                 isExit = true;
@@ -149,6 +155,61 @@ public class SalesPersonOperation extends BaseOperation {
         System.out.println("End of Query");
     }
 
-    private void sellPartsOption() {
+    private void sellPartOption() throws SQLException, IOException {
+        int partID = enterSellPartID();
+        int salespersonID = enterSellPartSalespersonID();
+
+        PartDaoImpl partDao = new PartDaoImpl(this.conn);
+        Part part = partDao.getPart(partID);
+        if (part.getAvailableQuantity() > 0) {
+            sellPart(partDao, part, salespersonID);
+            return;
+        }
+
+        System.out.println("Error the part is not available");
+    }
+
+    private int enterSellPartID() throws IOException {
+        int input = -1;
+        boolean isExit = false;
+        while (!isExit) {
+            System.out.print("Enter The Part ID: ");
+            input = getInputOption();
+            if (input >= 0) {
+                isExit = true;
+            }
+        }
+        return input;
+    }
+
+    private int enterSellPartSalespersonID() throws IOException {
+        int input = -1;
+        boolean isExit = false;
+        while (!isExit) {
+            System.out.print("Enter The Salesperson ID: ");
+            input = getInputOption();
+            if (input >= 0) {
+                isExit = true;
+            }
+        }
+        return input;
+    }
+
+    private void sellPart(PartDaoImpl partDao, Part part, int salespersonID) throws SQLException {
+        TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
+        int newPrimaryKey = transactionDao.getNewPrimaryKey(TransactionColumnKey.ID, Transaction.TABLE_NAME);
+        Date currentDate = transactionDao.getCurrentDate();
+
+        Transaction transaction = new Transaction(
+                newPrimaryKey,
+                part.getID(),
+                salespersonID,
+                currentDate);
+        transactionDao.add(transaction);
+        part.setAvailableQuantity(part.getAvailableQuantity() - 1);
+        partDao.update(part);
+
+        System.out.printf("Product: %s(id: %d) Remaining Quantity: %d\n",
+                part.getName(), part.getID(), part.getAvailableQuantity());
     }
 }

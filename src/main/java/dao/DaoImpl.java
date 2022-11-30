@@ -1,6 +1,11 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +27,24 @@ public class DaoImpl<T> implements Dao<T> {
     @Override
     public void addQuerySuffix(String suffix) {
         this.querySuffix.add(suffix);
+    }
+
+    @Override
+    public Date getCurrentDate() throws SQLException {
+        String query = "SELECT CURDATE()";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return rs.getDate(1);
+    }
+
+    @Override
+    public int getNewPrimaryKey(ColumnKey column, String table) throws SQLException {
+        String query = "SELECT MAX(" + column.toString() + ") FROM " + table;
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(query);
+        rs.next();
+        return rs.getInt(1) + 1;
     }
 
     // The unchecked warning is ignored assuming casting is valid
