@@ -34,9 +34,14 @@ public class SalesPersonOperation extends BaseOperation {
             try {
                 isExit = selectOperation();
             } catch (SQLException e) {
-
+                System.out.println("Error excecuting SQL query");
+                System.out.println("Error code: " + e.getErrorCode());
+                System.out.println("SQL state: " + e.getSQLState());
+                System.out.println("Message: " + e.getMessage());
+                e.printStackTrace();
             } catch (IOException e) {
-
+                System.out.println("I/O Error");
+                e.printStackTrace();
             }
         }
     }
@@ -67,7 +72,7 @@ public class SalesPersonOperation extends BaseOperation {
         return isExit;
     }
 
-    private void searchPartsOption() {
+    private void searchPartsOption() throws SQLException, IOException {
         ColumnKey criterion;
         String criterionValue;
         OrderDirection order;
@@ -75,21 +80,10 @@ public class SalesPersonOperation extends BaseOperation {
         System.out.println("1. Part Name");
         System.out.println("2. Manufacturer Name");
 
-        try {
-            criterion = selectSearchPartsCriterion();
-            criterionValue = enterSearchPartsKeyword();
-            order = getSearchPartsOrder();
-            showSearchPartsContent(criterion, criterionValue, order);
-        } catch (SQLException e) {
-            System.out.println("Error excecuting SQL query");
-            System.out.println("Error code: " + e.getErrorCode());
-            System.out.println("SQL state: " + e.getSQLState());
-            System.out.println("Message: " + e.getMessage());
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("I/O Error");
-            e.printStackTrace();
-        }
+        criterion = selectSearchPartsCriterion();
+        criterionValue = enterSearchPartsKeyword();
+        order = getSearchPartsOrder();
+        showSearchPartsContent(criterion, criterionValue, order);
     }
 
     private ColumnKey selectSearchPartsCriterion() throws IOException {
@@ -113,26 +107,21 @@ public class SalesPersonOperation extends BaseOperation {
         return input;
     }
 
-    private OrderDirection getSearchPartsOrder() {
+    private OrderDirection getSearchPartsOrder() throws IOException {
         while (true) {
             System.out.println("Choosing ordering:");
             System.out.println("1. By price, ascending order");
             System.out.println("2. By price, descending order");
 
-            try {
-                System.out.print("Choose the search criterion: ");
-                int choice = getInputOption();
-                switch (choice) {
-                    case 1:
-                        return OrderDirection.ASC;
-                    case 2:
-                        return OrderDirection.DESC;
-                    default:
-                        System.out.println("Invalid Choice");
-                }
-
-            } catch (IOException e) {
-
+            System.out.print("Choose the search criterion: ");
+            int choice = getInputOption();
+            switch (choice) {
+                case 1:
+                    return OrderDirection.ASC;
+                case 2:
+                    return OrderDirection.DESC;
+                default:
+                    System.out.println("Invalid Choice");
             }
         }
     }
