@@ -3,6 +3,7 @@ package model;
 public class PartRelational extends Part {
     protected Manufacturer manufacturer;
     protected Category category;
+    protected int transactionCount;
 
     public PartRelational() {
         super();
@@ -42,5 +43,13 @@ public class PartRelational extends Part {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public int getTransactionCount() {
+        return this.transactionCount;
+    }
+
+    public void setTransactionCount(int transactionCount) {
+        this.transactionCount = transactionCount;
     }
 }

@@ -51,4 +51,30 @@ public class PartRelationalDaoImpl extends DaoImpl<PartRelationalDaoImpl> implem
 
         return parts;
     }
+
+    @Override
+    public List<PartRelational> getAllPartsWithTransactionCount() throws SQLException {
+        String query = "SELECT *, COUNT(transaction.tID) transactionCount FROM (part " +
+                "INNER JOIN transaction ON transaction.pID = part.pID) " +
+                "GROUP BY part.pID " +
+                "ORDER BY transactionCount DESC " +
+                getQuerySuffix();
+        PreparedStatement ps = conn.prepareStatement(query);
+
+        ResultSet rs = ps.executeQuery();
+        List<PartRelational> parts = new ArrayList<PartRelational>();
+
+        while (rs.next()) {
+            PartRelational part = new PartRelational();
+            part.setID(rs.getInt("pID"));
+            part.setName(rs.getString("pName"));
+            part.setPrice(rs.getInt("pPrice"));
+            part.setAvailableQuantity(rs.getInt("pAvailableQuantity"));
+            part.setWarrantyPeriod(rs.getInt("pWarrantyPeriod"));
+            part.setTransactionCount(rs.getInt("transactionCount"));
+            parts.add(part);
+        }
+
+        return parts;
+    }
 }

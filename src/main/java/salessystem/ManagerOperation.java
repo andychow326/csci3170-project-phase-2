@@ -6,10 +6,12 @@ import java.io.IOException;
 
 import client.DatabaseClient;
 import dao.ManufacturerRelationalDaoImpl;
+import dao.PartRelationalDaoImpl;
 import dao.SalespersonDaoImpl;
 import dao.SalespersonRelationalDaoImpl;
 import dao.Dao.OrderDirection;
 import model.ManufacturerRelational;
+import model.PartRelational;
 import model.Salesperson;
 import model.SalespersonRelational;
 
@@ -161,5 +163,21 @@ public class ManagerOperation extends BaseOperation {
     }
 
     private void showNMostPopularParts() throws SQLException, IOException {
+        System.out.print("Type in the number of parts: ");
+        int n = getInputInteger();
+
+        PartRelationalDaoImpl partRelationalDao = new PartRelationalDaoImpl(this.conn);
+        List<PartRelational> parts = partRelationalDao
+                .limit(n)
+                .getAllPartsWithTransactionCount();
+
+        System.out.println("| Part ID | Part Name | NO. of Transaction |");
+        parts.forEach(
+                part -> System.out.printf(
+                        "| %d | %s | %d |\n",
+                        part.getID(),
+                        part.getName(),
+                        part.getTransactionCount()));
+        System.out.println("End of Query");
     }
 }

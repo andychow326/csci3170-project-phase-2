@@ -83,4 +83,13 @@ public class DaoImpl<T> implements Dao<T> {
         this.addQuerySuffix("'%" + value + "%'");
         return (T) this;
     }
+
+    // The unchecked warning is ignored assuming casting is valid
+    @SuppressWarnings("unchecked")
+    @Override
+    public T limit(int value) {
+        this.addQuerySuffix("LIMIT");
+        this.addQuerySuffix(Integer.toString(value));
+        return (T) this;
+    }
 }

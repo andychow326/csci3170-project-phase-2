@@ -26,4 +26,6 @@ public interface Dao<T> {
     public T equals(String value);
 
     public T like(String value);
+
+    public T limit(int value);
 }
