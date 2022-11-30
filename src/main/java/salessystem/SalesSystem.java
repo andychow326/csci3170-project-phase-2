@@ -47,7 +47,7 @@ public class SalesSystem {
                 admin.start();
                 break;
             case 2:
-                SalesPersonOperation sales = new SalesPersonOperation(db);
+                SalespersonOperation sales = new SalespersonOperation(db);
                 sales.start();
                 break;
             case 3:

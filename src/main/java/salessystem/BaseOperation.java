@@ -10,7 +10,7 @@ import client.DatabaseClient;
 import model.Category;
 import model.Manufacturer;
 import model.Part;
-import model.SalesPerson;
+import model.Salesperson;
 import model.Transaction;
 
 public class BaseOperation {
@@ -27,7 +27,7 @@ public class BaseOperation {
             Category.TABLE_NAME,
             Manufacturer.TABLE_NAME,
             Part.TABLE_NAME,
-            SalesPerson.TABLE_NAME,
+            Salesperson.TABLE_NAME,
             Transaction.TABLE_NAME
     };
 
@@ -39,7 +39,7 @@ public class BaseOperation {
         return s.matches("^[0-9]*$");
     }
 
-    public static int getInputOption() throws IOException {
+    public static int getInputInteger() throws IOException {
         int choice;
         try {
             String input = inputReader.readLine();

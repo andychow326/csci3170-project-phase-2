@@ -7,6 +7,24 @@ public class Manufacturer extends BaseModel {
 
     public static final String TABLE_NAME = "manufacturer";
 
+    public enum ColumnKey implements BaseColumnKey {
+        ID("mID"),
+        NAME("mName"),
+        ADDRESS("mAddress"),
+        PHONE_NUMBER("mPhoneNumber");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return Manufacturer.TABLE_NAME + "." + key;
+        }
+    }
+
     public Manufacturer() {
         super();
     }

@@ -5,6 +5,22 @@ public class Category extends BaseModel {
 
     public static final String TABLE_NAME = "category";
 
+    public enum ColumnKey implements BaseColumnKey {
+        ID("cID"),
+        NAME("cName");
+
+        private final String key;
+
+        ColumnKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return Category.TABLE_NAME + "." + key;
+        }
+    }
+
     public Category() {
         super();
     }

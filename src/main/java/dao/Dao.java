@@ -3,7 +3,7 @@ package dao;
 import java.sql.Date;
 import java.sql.SQLException;
 
-import model.ColumnKey;
+import model.BaseColumnKey;
 
 public interface Dao<T> {
     public String getQuerySuffix();
@@ -12,18 +12,20 @@ public interface Dao<T> {
 
     public Date getCurrentDate() throws SQLException;
 
-    public int getNewPrimaryKey(ColumnKey column, String table) throws SQLException;
+    public int getNewPrimaryKey(BaseColumnKey column, String table) throws SQLException;
 
     public enum OrderDirection {
         ASC,
         DESC
     }
 
-    public T orderBy(ColumnKey column, OrderDirection direction);
+    public T orderBy(BaseColumnKey column, OrderDirection direction);
 
-    public T where(ColumnKey column);
+    public T where(BaseColumnKey column);
 
     public T equals(String value);
 
     public T like(String value);
+
+    public T limit(int value);
 }
