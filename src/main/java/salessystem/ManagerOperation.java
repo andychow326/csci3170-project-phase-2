@@ -1,9 +1,14 @@
 package salessystem;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.io.IOException;
 
 import client.DatabaseClient;
+import dao.SalesPersonDaoImpl;
+import dao.Dao.OrderDirection;
+import model.SalesPerson;
+import model.SalesPersonColumnKey;
 
 public class ManagerOperation extends BaseOperation {
     // constructor
@@ -78,6 +83,40 @@ public class ManagerOperation extends BaseOperation {
     }
 
     private void listAllSalespersonsByExperience() throws SQLException, IOException {
+        OrderDirection order = getListingOrder();
+        SalesPersonDaoImpl salesPersonDao = new SalesPersonDaoImpl(this.conn);
+        List<SalesPerson> salespersons = salesPersonDao
+                .orderBy(SalesPersonColumnKey.EXPERIENCE, order)
+                .getAllSalesPersons();
+
+        System.out.println("| ID | Name | Mobile Phone | Years of Experience |");
+        salespersons.forEach(
+                salesperson -> System.out.printf(
+                        "| %d | %s | %d | %d |\n",
+                        salesperson.getID(),
+                        salesperson.getName(),
+                        salesperson.getPhoneNumber(),
+                        salesperson.getExperience()));
+        System.out.println("End of Query");
+    }
+
+    private OrderDirection getListingOrder() throws IOException {
+        while (true) {
+            System.out.println("Choosing ordering:");
+            System.out.println("1. By ascending order");
+            System.out.println("2. By descending order");
+
+            System.out.print("Choose the list order: ");
+            int choice = getInputOption();
+            switch (choice) {
+                case 1:
+                    return OrderDirection.ASC;
+                case 2:
+                    return OrderDirection.DESC;
+                default:
+                    System.out.println("Invalid Choice");
+            }
+        }
     }
 
     private void countTransactionRecordsByExperience() throws SQLException, IOException {
