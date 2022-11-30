@@ -44,7 +44,7 @@ public class BaseOperation {
         try {
             String input = inputReader.readLine();
             if (input.isEmpty() || !isValidOption(input)) {
-                System.out.println("Please enter a valid option");
+                System.out.println("Please enter a valid number");
                 return -1;
             }
 
