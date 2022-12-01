@@ -3,14 +3,14 @@
 CREATE TABLE category (
     cID    INTEGER PRIMARY KEY,
     cName  VARCHAR(20) UNIQUE NOT NULL
-);
+) CHARACTER SET 'latin1' COLLATE 'latin1_general_cs';
 
 CREATE TABLE manufacturer (
     mID             INTEGER PRIMARY KEY,
     mName           VARCHAR(20) NOT NULL,
     mAddress        VARCHAR(50) NOT NULL,
     mPhoneNumber    INTEGER     NOT NULL
-);
+) CHARACTER SET 'latin1' COLLATE 'latin1_general_cs';
 
 CREATE TABLE part (
     pID                 INTEGER PRIMARY KEY,
@@ -25,7 +25,7 @@ CREATE TABLE part (
         REFERENCES manufacturer (mID) ON DELETE CASCADE,
     FOREIGN KEY (cID)
         REFERENCES category (cID) ON DELETE CASCADE
-);
+) CHARACTER SET 'latin1' COLLATE 'latin1_general_cs';
 
 CREATE TABLE salesperson (
     sID             INTEGER PRIMARY KEY,
@@ -33,7 +33,7 @@ CREATE TABLE salesperson (
     sAddress        VARCHAR(50) NOT NULL,
     sPhoneNumber    INTEGER     NOT NULL,
     sExperience     INTEGER     NOT NULL
-);
+) CHARACTER SET 'latin1' COLLATE 'latin1_general_cs';
 
 CREATE TABLE transaction (
     tID    INTEGER PRIMARY KEY,
@@ -45,7 +45,7 @@ CREATE TABLE transaction (
         REFERENCES part(pID) ON DELETE CASCADE,
     FOREIGN KEY(sID)
         REFERENCES salesperson(sID) ON DELETE CASCADE
-);
+) CHARACTER SET 'latin1' COLLATE 'latin1_general_cs';
 
 -- +migrate Down
 DROP TABLE transaction;
