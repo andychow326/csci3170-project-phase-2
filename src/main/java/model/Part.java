@@ -42,13 +42,27 @@ public class Part extends BaseModel {
             int manufacturerID,
             int categoryID,
             int warrantyPeriod,
-            int availableQuantity) {
+            int availableQuantity) throws IllegalArgumentException {
         super(id);
         this.name = name;
         this.price = price;
         this.manufacturerID = manufacturerID;
         this.categoryID = categoryID;
         this.warrantyPeriod = warrantyPeriod;
+
+        this.validate();
+    }
+
+    // Validate the Part entries format
+    public void validate() throws IllegalArgumentException {
+        this.checkInRange("Part ID", this.id, 1, 999);
+        this.checkNonEmptyString("Part Name", this.name);
+        this.checkInRange("Part Price", this.price, 1, 99999);
+        this.checkInRange("Part Manufacturer ID", this.manufacturerID, 1, 99);
+        this.checkInRange("Part Category ID", this.categoryID, 1, 9);
+        this.checkInRange("Part Warranty Period", this.warrantyPeriod, 1, 99);
+        this.checkInRange("Part Available Quantity", this.availableQuantity, 0, 99);
+
     }
 
     public String getName() {

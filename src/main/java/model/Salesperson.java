@@ -36,12 +36,24 @@ public class Salesperson extends BaseModel {
             String name,
             String address,
             int phoneNumber,
-            int experience) {
+            int experience) throws IllegalArgumentException {
         super(id);
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.experience = experience;
+
+        this.validate();
+    }
+
+    // Validate the Salesperson entries format
+    public void validate() throws IllegalArgumentException {
+        this.checkInRange("Salesperson ID", id, 1, 99);
+        this.checkNonEmptyString("Salesperson Name", name);
+        this.checkNonEmptyString("Salesperson Address", address);
+        this.checkInRange("Salesperson Phone Number", phoneNumber, 10000000, 99999999);
+        this.checkInRange("Salesperson Experience", experience, 1, 9);
+
     }
 
     public String getName() {

@@ -33,11 +33,22 @@ public class Manufacturer extends BaseModel {
             int id,
             String name,
             String address,
-            int phoneNumber) {
+            int phoneNumber) throws IllegalArgumentException {
         super(id);
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
+
+        this.validate();
+    }
+
+    // Validate the Manufacturer entries format
+    public void validate() throws IllegalArgumentException {
+        this.checkInRange("Manufacturer ID", this.id, 1, 99);
+        this.checkNonEmptyString("Manufacturer Name", this.name);
+        this.checkNonEmptyString("Manufacturer Address", this.address);
+        this.checkInRange("Manufacturer Phone Number", this.phoneNumber, 10000000, 99999999);
+
     }
 
     public String getName() {

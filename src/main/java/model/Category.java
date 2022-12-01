@@ -25,9 +25,17 @@ public class Category extends BaseModel {
         super();
     }
 
-    public Category(int id, String name) {
+    public Category(int id, String name) throws IllegalArgumentException {
         super(id);
         this.name = name;
+
+        this.validate();
+    }
+
+    // Validate the Category entries format
+    public void validate() throws IllegalArgumentException {
+        this.checkInRange("Category ID", this.id, 1, 9);
+        this.checkNonEmptyString("Category Name", this.name);
     }
 
     public String getName() {

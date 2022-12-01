@@ -32,11 +32,20 @@ public class Transaction extends BaseModel {
         super();
     }
 
-    public Transaction(int id, int partID, int salespersonID, Date date) {
+    public Transaction(int id, int partID, int salespersonID, Date date) throws IllegalArgumentException {
         super(id);
         this.partID = partID;
         this.salespersonID = salespersonID;
         this.date = date;
+
+        this.validate();
+    }
+
+    // Validate the Transaction entries format
+    public void validate() throws IllegalArgumentException {
+        this.checkInRange("Transaction ID", this.id, 1, 9999);
+        this.checkInRange("Transaction Part ID", this.partID, 1, 999);
+        this.checkInRange("Transaction Salesperson ID", this.salespersonID, 1, 99);
     }
 
     public int getPartID() {
