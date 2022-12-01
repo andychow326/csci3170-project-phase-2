@@ -13,22 +13,18 @@ public class Config {
         final String propFilename = "config.properties";
         InputStream input;
 
-        try {
-            input = getClass().getClassLoader().getResourceAsStream(propFilename);
-            Properties prop = new Properties();
+        input = getClass().getClassLoader().getResourceAsStream(propFilename);
+        Properties prop = new Properties();
 
-            // Load the config file
-            prop.load(input);
+        // Load the config file
+        prop.load(input);
 
-            // Save the config value in to the Config object
-            this.setDatabaseURL(prop.getProperty("db.url", ""));
-            this.setDatabaseUser(prop.getProperty("db.user", ""));
-            this.setDatabasePassword(prop.getProperty("db.password", ""));
+        // Save the config value in to the Config object
+        this.setDatabaseURL(prop.getProperty("db.url", ""));
+        this.setDatabaseUser(prop.getProperty("db.user", ""));
+        this.setDatabasePassword(prop.getProperty("db.password", ""));
 
-            input.close();
-        } catch (Exception e) {
-            throw e;
-        }
+        input.close();
     }
 
     public void setDatabaseURL(String databaseURL) {

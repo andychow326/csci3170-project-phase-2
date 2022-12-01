@@ -22,27 +22,27 @@ setup-prod: ./config.properties.production
 
 .PHONY: clean
 clean:
-	@rm -rf ./target
-	@git checkout -- ./target
+	rm -rf ./target
+	git checkout -- ./target
 
 .PHONY: build
 build: ./src/main/resources/config.properties ./src/main/resources/schema.sql ./src/main/resources/mysql-jdbc.jar
-	@printf "Compiling..."
-	@make clean
-	@$(JAVAC) -d ./target/classes ./src/main/java/**/*.java
-	@cp ./src/main/resources/config.properties ./target/classes/
-	@cp -r ./src/main/resources/* ./target/classes/
-	@printf "Done!\n"
+	printf "Compiling..."
+	make clean
+	$(JAVAC) -d ./target/classes ./src/main/java/**/*.java
+	cp ./src/main/resources/config.properties ./target/classes/
+	cp -r ./src/main/resources/* ./target/classes/
+	printf "Done!\n"
 
 .PHONY: start
 start: ./target/classes/client/Main.class ./target/classes/mysql-jdbc.jar
-	@$(JAVA) -cp ./target/classes/mysql-jdbc.jar:./target/classes client.Main
+	$(JAVA) -cp ./target/classes/mysql-jdbc.jar:./target/classes client.Main
 
 .PHONY: run
 run:
-	@make build
-	@clear
-	@make start
+	make build
+	clear
+	make start
 
 .PHONY: check-tidy
 check-tidy:
