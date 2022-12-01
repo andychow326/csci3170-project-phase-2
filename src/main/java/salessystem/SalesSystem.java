@@ -1,17 +1,13 @@
 package salessystem;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 import client.DatabaseClient;
 
-public class SalesSystem {
-    private Scanner input = new Scanner(System.in);
-    private DatabaseClient db;
-
+public class SalesSystem extends BaseOperation {
     // constructor
     public SalesSystem(DatabaseClient dbClient) {
-        this.db = dbClient;
+        super(dbClient);
     }
 
     public void execute() throws IOException {
@@ -34,13 +30,13 @@ public class SalesSystem {
 
     private Boolean selectRole() throws IOException {
         System.out.print("Enter Your Choice: ");
-        int choice = 0;
-        Boolean isExit = false;
-        try {
-            choice = input.nextInt();
-        } catch (Exception e) {
-            System.out.println("ERROR!! You did not input a integer!");
+        boolean isExit = false;
+
+        int choice = getInputInteger();
+        if (choice < 0) {
+            return isExit;
         }
+
         switch (choice) {
             case 1:
                 AdministratorOperation admin = new AdministratorOperation(db);
