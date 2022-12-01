@@ -16,17 +16,17 @@ import model.Salesperson;
 import model.SalespersonRelational;
 
 public class ManagerOperation extends BaseOperation {
-    // constructor
+    // Constructs a new ManagerOperation
     public ManagerOperation(DatabaseClient dbClient) {
         super(dbClient);
-        // start of the Manager Operation
-        System.out.println("Manager Operation!!");
     }
 
+    // The main function of the ManagerOperation
     public void start() {
         displayManagerMenu();
     }
 
+    // Display the Manager menu
     private void displayManagerMenu() {
         boolean isExit = false;
         while (!isExit) {
@@ -54,6 +54,7 @@ public class ManagerOperation extends BaseOperation {
         }
     }
 
+    // Logic for selecting each operation
     private boolean selectOperation() throws SQLException, IOException {
         System.out.print("Enter Your Choice: ");
         boolean isExit = false;
@@ -87,6 +88,7 @@ public class ManagerOperation extends BaseOperation {
         return isExit;
     }
 
+    // List all salespersons by experience range and order by specific order
     private void listAllSalespersonsByExperience() throws SQLException, IOException {
         OrderDirection order = getListingOrder();
         SalespersonDaoImpl salespersonDao = new SalespersonDaoImpl(this.conn);
@@ -105,6 +107,7 @@ public class ManagerOperation extends BaseOperation {
         System.out.println("End of Query");
     }
 
+    // Ask for input for ordering
     private OrderDirection getListingOrder() throws IOException {
         while (true) {
             System.out.println("Choosing ordering:");
@@ -124,6 +127,8 @@ public class ManagerOperation extends BaseOperation {
         }
     }
 
+    // Count the no. of sales record of each salesperson under a specific range on
+    // years of experience
     private void countTransactionRecordsByExperience() throws SQLException, IOException {
         System.out.print("Type in the lower bound for years of experience: ");
         int lowerBound = getInputInteger();
@@ -148,6 +153,7 @@ public class ManagerOperation extends BaseOperation {
         System.out.println("End of Query");
     }
 
+    // Show total sales value of each manufacturer
     private void showTotalSalesValueOfEachManufacturer() throws SQLException, IOException {
         ManufacturerRelationalDaoImpl manufacturerDao = new ManufacturerRelationalDaoImpl(this.conn);
         List<ManufacturerRelational> manufacturers = manufacturerDao.getAllManufacturersWithTotalSalesValue();
@@ -162,6 +168,7 @@ public class ManagerOperation extends BaseOperation {
         System.out.println("End of Query");
     }
 
+    // Show the N most popular parts
     private void showNMostPopularParts() throws SQLException, IOException {
         System.out.print("Type in the number of parts: ");
         int n = getInputInteger();

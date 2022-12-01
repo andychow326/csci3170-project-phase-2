@@ -17,15 +17,17 @@ import model.PartRelational;
 import model.Transaction;
 
 public class SalespersonOperation extends BaseOperation {
-    // constructor
+    // Constructs a new SalespersonOperation
     public SalespersonOperation(DatabaseClient dbClient) {
         super(dbClient);
     }
 
+    // The main function of the SalespersonOperation
     public void start() {
         displaySalesMenu();
     }
 
+    // Display the Salesperson menu
     private void displaySalesMenu() {
         boolean isExit = false;
         while (!isExit) {
@@ -50,6 +52,7 @@ public class SalespersonOperation extends BaseOperation {
         }
     }
 
+    // Logic for selecting each operation
     private boolean selectOperation() throws SQLException, IOException {
         System.out.print("Enter Your Choice: ");
         boolean isExit = false;
@@ -76,13 +79,11 @@ public class SalespersonOperation extends BaseOperation {
         return isExit;
     }
 
+    // Perform search parts operation
     private void searchPartsOption() throws SQLException, IOException {
         BaseColumnKey criterion;
         String criterionValue;
         OrderDirection order;
-        System.out.println("Choose the Search Criterion:");
-        System.out.println("1. Part Name");
-        System.out.println("2. Manufacturer Name");
 
         criterion = selectSearchPartsCriterion();
         criterionValue = enterSearchPartsKeyword();
@@ -90,8 +91,13 @@ public class SalespersonOperation extends BaseOperation {
         showSearchPartsContent(criterion, criterionValue, order);
     }
 
+    // Ask for input search criterion
     private BaseColumnKey selectSearchPartsCriterion() throws IOException {
         while (true) {
+            System.out.println("Choose the Search Criterion:");
+            System.out.println("1. Part Name");
+            System.out.println("2. Manufacturer Name");
+
             System.out.print("Choose the search criterion: ");
             int choice = getInputInteger();
             switch (choice) {
@@ -105,12 +111,14 @@ public class SalespersonOperation extends BaseOperation {
         }
     }
 
+    // Ask for input search keyword
     private String enterSearchPartsKeyword() throws IOException {
         System.out.print("Type in the Search Keyword: ");
         String input = getInputString();
         return input;
     }
 
+    // Ask for input search order
     private OrderDirection getSearchPartsOrder() throws IOException {
         while (true) {
             System.out.println("Choosing ordering:");
@@ -130,6 +138,7 @@ public class SalespersonOperation extends BaseOperation {
         }
     }
 
+    // Show the search parts content
     private void showSearchPartsContent(BaseColumnKey searchKey, String searchValue, OrderDirection order)
             throws SQLException {
         PartRelationalDaoImpl partRelationalDao = new PartRelationalDaoImpl(this.conn);
@@ -153,6 +162,7 @@ public class SalespersonOperation extends BaseOperation {
         System.out.println("End of Query");
     }
 
+    // Perform sell part operation
     private void sellPartOption() throws SQLException, IOException {
         int partID = enterSellPartID();
         int salespersonID = enterSellPartSalespersonID();
@@ -167,6 +177,7 @@ public class SalespersonOperation extends BaseOperation {
         System.out.println("Error the part is not available");
     }
 
+    // Ask for input sell part id
     private int enterSellPartID() throws IOException {
         int input = -1;
         boolean isExit = false;
@@ -180,6 +191,7 @@ public class SalespersonOperation extends BaseOperation {
         return input;
     }
 
+    // Ask for input the salesperson id that sell the part
     private int enterSellPartSalespersonID() throws IOException {
         int input = -1;
         boolean isExit = false;
@@ -193,6 +205,8 @@ public class SalespersonOperation extends BaseOperation {
         return input;
     }
 
+    // Sell the part with the corresponding salesperson and display the status of
+    // current part
     private void sellPart(PartDaoImpl partDao, Part part, int salespersonID) throws SQLException {
         TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
         int newPrimaryKey = transactionDao.getNewPrimaryKey(Transaction.ColumnKey.ID, Transaction.TABLE_NAME);

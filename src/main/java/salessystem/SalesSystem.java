@@ -5,18 +5,20 @@ import java.io.IOException;
 import client.DatabaseClient;
 
 public class SalesSystem extends BaseOperation {
-    // constructor
+    // Constructs a new SalesSystem
     public SalesSystem(DatabaseClient dbClient) {
         super(dbClient);
     }
 
+    // The starting point of the SalesSystem
     public void execute() throws IOException {
         System.out.println("Welcome to sales system!");
         displayMainMenu();
     }
 
-    private void displayMainMenu() throws IOException {
-        Boolean isExit = false;
+    // Display the main menu for chooing operations
+    private void displayMainMenu() {
+        boolean isExit = false;
         while (!isExit) {
             System.out.println("\n-----Main Menu-----");
             System.out.println("What kinds of operation would you like to perform?");
@@ -24,11 +26,18 @@ public class SalesSystem extends BaseOperation {
             System.out.println("2. Operations for salesperson");
             System.out.println("3. Operations for manager");
             System.out.println("4. Exit this program");
-            isExit = selectRole();
+
+            try {
+                isExit = selectRole();
+            } catch (IOException e) {
+                System.out.println("I/O Error");
+                e.printStackTrace();
+            }
         }
     }
 
-    private Boolean selectRole() throws IOException {
+    // Logic for selecting each operation
+    private boolean selectRole() throws IOException {
         System.out.print("Enter Your Choice: ");
         boolean isExit = false;
 

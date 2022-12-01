@@ -18,11 +18,13 @@ public class BaseOperation {
     protected DatabaseClient db;
     protected Connection conn;
 
+    // Constructs a new BaseOperation
     public BaseOperation(DatabaseClient dbClient) {
         this.db = dbClient;
         this.conn = dbClient.getConnection();
     }
 
+    // All tables in the database
     public static final String[] TABLES = {
             Category.TABLE_NAME,
             Manufacturer.TABLE_NAME,
@@ -31,14 +33,17 @@ public class BaseOperation {
             Transaction.TABLE_NAME
     };
 
+    // Check if the input is the valid table name which is in the TABLES array
     public static boolean isValidTableName(String tableName) {
         return Arrays.stream(TABLES).anyMatch(x -> x.equals(tableName));
     }
 
+    // Check if the input is the valid integer
     public static boolean isValidOption(String s) {
         return s.matches("^[0-9]*$");
     }
 
+    // Ask for input an integer and perform validation
     public static int getInputInteger() throws IOException {
         int choice;
         try {
@@ -57,6 +62,7 @@ public class BaseOperation {
         return choice;
     }
 
+    // Ask for input a string and perform validation
     public static String getInputString() throws IOException {
         String input;
         input = inputReader.readLine();

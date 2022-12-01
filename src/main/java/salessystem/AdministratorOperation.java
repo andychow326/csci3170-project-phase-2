@@ -29,15 +29,17 @@ import model.Transaction;
 import java.text.ParseException;
 
 public class AdministratorOperation extends BaseOperation {
-    // constructor
+    // Constructs a new AdministratorOperation
     public AdministratorOperation(DatabaseClient dbClient) throws IOException {
         super(dbClient);
     }
 
+    // The main function of AdministratorOperation
     public void start() {
         displayAdminMenu();
     }
 
+    // Display the Administrator manu
     private void displayAdminMenu() {
         boolean isExit = false;
         while (!isExit) {
@@ -64,6 +66,7 @@ public class AdministratorOperation extends BaseOperation {
         }
     }
 
+    // Logic for selecting each operation
     private boolean selectOp() throws SQLException, IOException {
         System.out.print("Enter Your Choice: ");
         boolean isExit = false;
@@ -96,18 +99,21 @@ public class AdministratorOperation extends BaseOperation {
         return isExit;
     }
 
+    // Create all tables
     private void createTables() throws SQLException, IOException {
         System.out.print("Processing...");
         this.db.migrator.up();
         System.out.println("Done! Database is initialized!");
     }
 
+    // Delete all tables
     private void deleteTables() throws SQLException, IOException {
         System.out.print("Processing...");
         this.db.migrator.down();
         System.out.println("Done! Database is removed!");
     }
 
+    // Load data from source folder
     private void loadData() throws SQLException, IOException {
         // Ask for source data folder path
         System.out.print("Type in the Source Data Folder Path: ");
@@ -127,6 +133,7 @@ public class AdministratorOperation extends BaseOperation {
 
         System.out.print("Processing...");
         boolean isError = false;
+        // A collection of error files
         List<String> errorFiles = new ArrayList<String>();
         try (
                 InputStream input = getClass().getClassLoader().getResourceAsStream(folderName);
@@ -164,6 +171,7 @@ public class AdministratorOperation extends BaseOperation {
         System.out.println("Done! Data is inputted to the database!");
     }
 
+    // Process a file content and perform insertions
     private void processFileData(String filepath) throws SQLException, IOException {
         File file = new File(filepath);
         if (file.isDirectory()) {
@@ -192,6 +200,7 @@ public class AdministratorOperation extends BaseOperation {
         }
     }
 
+    // Insert the category data to the database
     private void insertCategoryDataFromFile(String filepath) throws SQLException, IOException {
         CategoryDaoImpl categoryDao = new CategoryDaoImpl(this.conn);
         List<Category> categories = new ArrayList<Category>();
@@ -209,6 +218,7 @@ public class AdministratorOperation extends BaseOperation {
         categoryDao.addAll(categories);
     }
 
+    // Insert the manufacturer data to the database
     private void insertManufacturerDataFromFile(String filepath) throws SQLException, IOException {
         ManufacturerDaoImpl manufacturerDao = new ManufacturerDaoImpl(this.conn);
         List<Manufacturer> manufacturers = new ArrayList<Manufacturer>();
@@ -226,6 +236,7 @@ public class AdministratorOperation extends BaseOperation {
         manufacturerDao.addAll(manufacturers);
     }
 
+    // Insert the part data to the database
     private void insertPartDataFromFile(String filepath) throws SQLException, IOException {
         PartDaoImpl partDaoImpl = new PartDaoImpl(this.conn);
         List<Part> parts = new ArrayList<Part>();
@@ -243,6 +254,7 @@ public class AdministratorOperation extends BaseOperation {
         partDaoImpl.addAll(parts);
     }
 
+    // Insert the salesperson data to the database
     private void insertSalespersonDataFromFile(String filepath) throws SQLException, IOException {
         SalespersonDaoImpl salespersonDaoImpl = new SalespersonDaoImpl(this.conn);
         List<Salesperson> salespersons = new ArrayList<Salesperson>();
@@ -260,6 +272,7 @@ public class AdministratorOperation extends BaseOperation {
         salespersonDaoImpl.addAll(salespersons);
     }
 
+    // Insert the transaction data to the database
     private void insertTransactionDataFromFile(String filepath) throws SQLException, IOException {
         TransactionDaoImpl transactionDaoImpl = new TransactionDaoImpl(this.conn);
         List<Transaction> transactions = new ArrayList<Transaction>();
@@ -282,6 +295,7 @@ public class AdministratorOperation extends BaseOperation {
         transactionDaoImpl.addAll(transactions);
     }
 
+    // Show content of the corresponding database table
     private void showContent() throws SQLException, IOException {
         System.out.print("Which table would you like to show: ");
         String choice = inputReader.readLine();
@@ -291,88 +305,84 @@ public class AdministratorOperation extends BaseOperation {
             return;
         }
 
-        try {
-            System.out.println("Content of table category:");
-            switch (choice) {
-                case "category":
-                    CategoryDaoImpl categoryDao = new CategoryDaoImpl(this.conn);
-                    List<Category> categories = categoryDao
-                            .orderBy(Category.ColumnKey.ID, OrderDirection.ASC)
-                            .getAllCategories();
+        System.out.println("Content of table category:");
+        switch (choice) {
+            case "category":
+                CategoryDaoImpl categoryDao = new CategoryDaoImpl(this.conn);
+                List<Category> categories = categoryDao
+                        .orderBy(Category.ColumnKey.ID, OrderDirection.ASC)
+                        .getAllCategories();
 
-                    System.out.println("| cID | cName |");
-                    categories.forEach(
-                            category -> System.out.printf(
-                                    "| %d | %s |\n",
-                                    category.getID(), category.getName()));
-                    break;
-                case "manufacturer":
-                    ManufacturerDaoImpl manufacturerDao = new ManufacturerDaoImpl(this.conn);
-                    List<Manufacturer> manufacturers = manufacturerDao
-                            .orderBy(Manufacturer.ColumnKey.ID, OrderDirection.ASC)
-                            .getAllManufacturers();
+                System.out.println("| cID | cName |");
+                categories.forEach(
+                        category -> System.out.printf(
+                                "| %d | %s |\n",
+                                category.getID(), category.getName()));
+                break;
+            case "manufacturer":
+                ManufacturerDaoImpl manufacturerDao = new ManufacturerDaoImpl(this.conn);
+                List<Manufacturer> manufacturers = manufacturerDao
+                        .orderBy(Manufacturer.ColumnKey.ID, OrderDirection.ASC)
+                        .getAllManufacturers();
 
-                    System.out.println("| mID | mName | mAddress | mPhoneNumber |");
-                    manufacturers.forEach(
-                            manufacturer -> System.out.printf(
-                                    "| %d | %s | %s | %d |\n",
-                                    manufacturer.getID(),
-                                    manufacturer.getName(),
-                                    manufacturer.getAddress(),
-                                    manufacturer.getPhoneNumber()));
-                    break;
-                case "part":
-                    PartDaoImpl partDaoImpl = new PartDaoImpl(this.conn);
-                    List<Part> parts = partDaoImpl
-                            .orderBy(Part.ColumnKey.ID, OrderDirection.ASC)
-                            .getAllParts();
+                System.out.println("| mID | mName | mAddress | mPhoneNumber |");
+                manufacturers.forEach(
+                        manufacturer -> System.out.printf(
+                                "| %d | %s | %s | %d |\n",
+                                manufacturer.getID(),
+                                manufacturer.getName(),
+                                manufacturer.getAddress(),
+                                manufacturer.getPhoneNumber()));
+                break;
+            case "part":
+                PartDaoImpl partDaoImpl = new PartDaoImpl(this.conn);
+                List<Part> parts = partDaoImpl
+                        .orderBy(Part.ColumnKey.ID, OrderDirection.ASC)
+                        .getAllParts();
 
-                    System.out.println("| pID | pName | pPrice | mID | cID | pWarrantyPeriod | pAvailableQuantity |");
-                    parts.forEach(part -> System.out.printf(
-                            "| %d | %s | %d | %d | %d | %d | %d |\n",
-                            part.getID(),
-                            part.getName(),
-                            part.getPrice(),
-                            part.getManufacturerID(),
-                            part.getCategoryID(),
-                            part.getWarrantyPeriod(),
-                            part.getAvailableQuantity()));
-                    break;
-                case "salesperson":
-                    SalespersonDaoImpl salespersonDaoImpl = new SalespersonDaoImpl(this.conn);
-                    List<Salesperson> salespersons = salespersonDaoImpl
-                            .orderBy(Salesperson.ColumnKey.ID, OrderDirection.ASC)
-                            .getAllSalespersons();
+                System.out.println("| pID | pName | pPrice | mID | cID | pWarrantyPeriod | pAvailableQuantity |");
+                parts.forEach(part -> System.out.printf(
+                        "| %d | %s | %d | %d | %d | %d | %d |\n",
+                        part.getID(),
+                        part.getName(),
+                        part.getPrice(),
+                        part.getManufacturerID(),
+                        part.getCategoryID(),
+                        part.getWarrantyPeriod(),
+                        part.getAvailableQuantity()));
+                break;
+            case "salesperson":
+                SalespersonDaoImpl salespersonDaoImpl = new SalespersonDaoImpl(this.conn);
+                List<Salesperson> salespersons = salespersonDaoImpl
+                        .orderBy(Salesperson.ColumnKey.ID, OrderDirection.ASC)
+                        .getAllSalespersons();
 
-                    System.out.println("| sID | sName | sAddress | sPhoneNumber | sExperience |");
-                    salespersons.forEach(
-                            salesperson -> System.out.printf(
-                                    "| %d | %s | %s | %d | %d\n",
-                                    salesperson.getID(),
-                                    salesperson.getName(),
-                                    salesperson.getAddress(),
-                                    salesperson.getPhoneNumber(),
-                                    salesperson.getExperience()));
-                    break;
-                case "transaction":
-                    TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
-                    List<Transaction> transactions = transactionDao
-                            .orderBy(Transaction.ColumnKey.ID, OrderDirection.ASC)
-                            .getAllTransactions();
+                System.out.println("| sID | sName | sAddress | sPhoneNumber | sExperience |");
+                salespersons.forEach(
+                        salesperson -> System.out.printf(
+                                "| %d | %s | %s | %d | %d\n",
+                                salesperson.getID(),
+                                salesperson.getName(),
+                                salesperson.getAddress(),
+                                salesperson.getPhoneNumber(),
+                                salesperson.getExperience()));
+                break;
+            case "transaction":
+                TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
+                List<Transaction> transactions = transactionDao
+                        .orderBy(Transaction.ColumnKey.ID, OrderDirection.ASC)
+                        .getAllTransactions();
 
-                    System.out.println("| tID | pID | sID | tDate |");
-                    transactions.forEach(
-                            transaction -> System.out.printf(
-                                    "| %d | %d | %d | %s |\n",
-                                    transaction.getID(),
-                                    transaction.getPartID(),
-                                    transaction.getSalespersonID(),
-                                    transaction.getDateString()));
-                    break;
-            }
-        } catch (SQLException e) {
-            System.out.println("\nERROR" + e);
-            throw e;
+                System.out.println("| tID | pID | sID | tDate |");
+                transactions.forEach(
+                        transaction -> System.out.printf(
+                                "| %d | %d | %d | %s |\n",
+                                transaction.getID(),
+                                transaction.getPartID(),
+                                transaction.getSalespersonID(),
+                                transaction.getDateString()));
+                break;
         }
+
     }
 }
