@@ -7,7 +7,7 @@ public class Manufacturer extends BaseModel {
 
     public static final String TABLE_NAME = "manufacturer";
 
-    public enum ColumnKey implements BaseColumnKey {
+    public enum ColumnKey implements BaseModel.ColumnKey {
         ID("mID"),
         NAME("mName"),
         ADDRESS("mAddress"),
@@ -44,10 +44,10 @@ public class Manufacturer extends BaseModel {
 
     // Validate the Manufacturer entries format
     public void validate() throws IllegalArgumentException {
-        this.checkInRange("Manufacturer ID", this.id, 1, 99);
-        this.checkNonEmptyString("Manufacturer Name", this.name);
-        this.checkNonEmptyString("Manufacturer Address", this.address);
-        this.checkInRange("Manufacturer Phone Number", this.phoneNumber, 10000000, 99999999);
+        checkInRange("Manufacturer ID", this.id, 1, 99);
+        checkNonEmptyString("Manufacturer Name", this.name);
+        checkNonEmptyString("Manufacturer Address", this.address);
+        checkInRange("Manufacturer Phone Number", this.phoneNumber, 10000000, 99999999);
 
     }
 
@@ -77,10 +77,7 @@ public class Manufacturer extends BaseModel {
 
     public static Manufacturer parseString(String rawString) throws IllegalArgumentException {
         String[] record = rawString.split("\t");
-        if (record.length != 4) {
-            throw new IllegalArgumentException(
-                    "Invalid number of entries, expected: 4, actual: " + record.length);
-        }
+        checkRecordLength(record.length, 4);
         return new Manufacturer(
                 Integer.parseInt(record[0]),
                 record[1],

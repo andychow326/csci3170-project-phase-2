@@ -11,7 +11,7 @@ public class SalesSystem extends BaseOperation {
     }
 
     // The starting point of the SalesSystem
-    public void execute() throws IOException {
+    public void execute() {
         System.out.println("Welcome to sales system!");
         displayMainMenu();
     }
@@ -30,8 +30,7 @@ public class SalesSystem extends BaseOperation {
             try {
                 isExit = selectRole();
             } catch (IOException e) {
-                System.out.println("I/O Error");
-                e.printStackTrace();
+                handleIOException(e);
             }
         }
     }

@@ -10,7 +10,7 @@ public class Transaction extends BaseModel {
 
     public static final String TABLE_NAME = "transaction";
 
-    public enum ColumnKey implements BaseColumnKey {
+    public enum ColumnKey implements BaseModel.ColumnKey {
         ID("tID"),
         PART_ID("pID"),
         SALES_PERSON_ID("sID"),
@@ -43,9 +43,9 @@ public class Transaction extends BaseModel {
 
     // Validate the Transaction entries format
     public void validate() throws IllegalArgumentException {
-        this.checkInRange("Transaction ID", this.id, 1, 9999);
-        this.checkInRange("Transaction Part ID", this.partID, 1, 999);
-        this.checkInRange("Transaction Salesperson ID", this.salespersonID, 1, 99);
+        checkInRange("Transaction ID", this.id, 1, 9999);
+        checkInRange("Transaction Part ID", this.partID, 1, 999);
+        checkInRange("Transaction Salesperson ID", this.salespersonID, 1, 99);
     }
 
     public int getPartID() {
@@ -78,10 +78,7 @@ public class Transaction extends BaseModel {
 
     public static Transaction parseString(String rawString) throws IllegalArgumentException, ParseException {
         String[] record = rawString.split("\t");
-        if (record.length != 4) {
-            throw new IllegalArgumentException(
-                    "Invalid number of entries, expected: 4, actual: " + record.length);
-        }
+        checkRecordLength(record.length, 4);
         return new Transaction(
                 Integer.parseInt(record[0]),
                 Integer.parseInt(record[1]),

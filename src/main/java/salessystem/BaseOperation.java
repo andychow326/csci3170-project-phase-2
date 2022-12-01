@@ -1,9 +1,11 @@
 package salessystem;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import client.DatabaseClient;
@@ -71,5 +73,22 @@ public class BaseOperation {
             return null;
         }
         return input;
+    }
+
+    public static void handleSQLException(SQLException e) {
+        System.out.println("Error excecuting SQL query: " + e.getMessage());
+    }
+
+    public static void handleIOException(IOException e) {
+        System.out.println("I/O Error");
+        e.printStackTrace();
+    }
+
+    public static void handleIllegalArgumentException(IllegalArgumentException e) {
+        System.out.println(e.getMessage());
+    }
+
+    public static void handleFileNotFoundException(FileNotFoundException e) {
+        System.out.println(e.getMessage());
     }
 }

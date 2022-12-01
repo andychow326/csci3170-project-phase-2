@@ -12,6 +12,10 @@ public class BaseModel {
         this.id = id;
     }
 
+    public interface ColumnKey {
+        String toString();
+    }
+
     public int getID() {
         return this.id;
     }
@@ -24,21 +28,29 @@ public class BaseModel {
         return new SimpleDateFormat("dd/MM/yyyy");
     }
 
-    public void checkInRange(String label, int value, int start, int end) throws IllegalArgumentException {
+    public static void checkInRange(String label, int value, int start, int end) throws IllegalArgumentException {
         if (value < start || value > end) {
             throw new IllegalArgumentException(
                     String.format(
-                            "Invalid %s, expected: in range %d to %d (inclusive), actual: %d",
+                            "Error: Invalid %s, expected: in range %d to %d (inclusive), actual: %d",
                             label, start, end, value));
         }
     }
 
-    public void checkNonEmptyString(String label, String value) throws IllegalArgumentException {
+    public static void checkNonEmptyString(String label, String value) throws IllegalArgumentException {
         if (value.isEmpty()) {
             throw new IllegalArgumentException(
                     String.format(
-                            "Invalid %s, expected: non-empty string, actual: %s",
+                            "Error: Invalid %s, expected: non-empty string, actual: %s",
                             label, value));
         }
+    }
+
+    public static void checkRecordLength(int source, int target) throws IllegalArgumentException {
+        if (source != target) {
+            throw new IllegalArgumentException(
+                    "Error: Invalid number of entries, expected: " + target + ", actual: " + source);
+        }
+
     }
 }

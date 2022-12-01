@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import client.DatabaseClient;
-import dao.CategoryDaoImpl;
-import dao.ManufacturerDaoImpl;
+import dao.CategoryDao;
+import dao.ManufacturerDao;
 import dao.PartDaoImpl;
-import dao.SalespersonDaoImpl;
-import dao.TransactionDaoImpl;
+import dao.SalespersonDao;
+import dao.TransactionDao;
 import dao.Dao.OrderDirection;
 import model.Category;
 import model.Manufacturer;
@@ -30,7 +30,7 @@ import java.text.ParseException;
 
 public class AdministratorOperation extends BaseOperation {
     // Constructs a new AdministratorOperation
-    public AdministratorOperation(DatabaseClient dbClient) throws IOException {
+    public AdministratorOperation(DatabaseClient dbClient) {
         super(dbClient);
     }
 
@@ -54,14 +54,13 @@ public class AdministratorOperation extends BaseOperation {
             try {
                 isExit = selectOp();
             } catch (SQLException e) {
-                System.out.println("Error excecuting SQL query");
-                System.out.println("Error code: " + e.getErrorCode());
-                System.out.println("SQL state: " + e.getSQLState());
-                System.out.println("Message: " + e.getMessage());
-                e.printStackTrace();
+                handleSQLException(e);
+            } catch (IllegalArgumentException e) {
+                handleIllegalArgumentException(e);
+            } catch (FileNotFoundException e) {
+                handleFileNotFoundException(e);
             } catch (IOException e) {
-                System.out.println("I/O Error");
-                e.printStackTrace();
+                handleIOException(e);
             }
         }
     }
@@ -93,42 +92,42 @@ public class AdministratorOperation extends BaseOperation {
                 isExit = true;
                 break;
             default:
-                System.out.println("ERROR!! Input must be within 1 to 5!");
+                System.out.println("Error: Input must be within 1 to 5");
         }
 
         return isExit;
     }
 
     // Create all tables
-    private void createTables() throws SQLException, IOException {
+    private void createTables() throws SQLException, FileNotFoundException, IOException {
         System.out.print("Processing...");
         this.db.migrator.up();
         System.out.println("Done! Database is initialized!");
     }
 
     // Delete all tables
-    private void deleteTables() throws SQLException, IOException {
+    private void deleteTables() throws SQLException, FileNotFoundException, IOException {
         System.out.print("Processing...");
         this.db.migrator.down();
         System.out.println("Done! Database is removed!");
     }
 
     // Load data from source folder
-    private void loadData() throws SQLException, IOException {
+    private void loadData() throws SQLException, FileNotFoundException, IOException {
         // Ask for source data folder path
         System.out.print("Type in the Source Data Folder Path: ");
         String folderName = inputReader.readLine();
         URL inputFileURL = getClass().getClassLoader().getResource(folderName);
 
         if (inputFileURL == null) {
-            throw new FileNotFoundException("Error file does not exist");
+            throw new FileNotFoundException("Error: File does not exist");
         }
 
         String folderPath = inputFileURL.getFile();
         File inputFile = new File(folderPath);
 
         if (inputFile.isFile()) {
-            throw new IllegalArgumentException("Error the input path is a file, please input a valid folder path.");
+            throw new IllegalArgumentException("Error: The input path is a file, please input a valid folder path");
         }
 
         System.out.print("Processing...");
@@ -145,16 +144,11 @@ public class AdministratorOperation extends BaseOperation {
                 try {
                     this.processFileData(absoluteFilePath);
                 } catch (SQLException e) {
-                    System.out.println("Error excecuting insert query from file: " + absoluteFilePath);
-                    System.out.println("Error code: " + e.getErrorCode());
-                    System.out.println("SQL state: " + e.getSQLState());
-                    System.out.println("Message: " + e.getMessage());
-                    e.printStackTrace();
+                    handleSQLException(e);
                     isError = true;
                     errorFiles.add(absoluteFilePath);
                 } catch (IOException e) {
-                    System.out.println("I/O Error");
-                    e.printStackTrace();
+                    handleIOException(e);
                     isError = true;
                     errorFiles.add(absoluteFilePath);
                 }
@@ -175,7 +169,7 @@ public class AdministratorOperation extends BaseOperation {
     private void processFileData(String filepath) throws SQLException, IOException {
         File file = new File(filepath);
         if (file.isDirectory()) {
-            System.out.printf("Not loaded %s: is a directory", file.getPath());
+            System.out.printf("Error: %s is a directory", file.getPath());
             return;
         }
 
@@ -196,13 +190,13 @@ public class AdministratorOperation extends BaseOperation {
                 insertTransactionDataFromFile(file.getPath());
                 break;
             default:
-                System.out.printf("Invalid file: %s\n", file.getPath());
+                System.out.printf("Error: Invalid file %s\n", file.getPath());
         }
     }
 
     // Insert the category data to the database
     private void insertCategoryDataFromFile(String filepath) throws SQLException, IOException {
-        CategoryDaoImpl categoryDao = new CategoryDaoImpl(this.conn);
+        CategoryDao categoryDao = new CategoryDao(this.conn);
         List<Category> categories = new ArrayList<Category>();
 
         String line;
@@ -220,7 +214,7 @@ public class AdministratorOperation extends BaseOperation {
 
     // Insert the manufacturer data to the database
     private void insertManufacturerDataFromFile(String filepath) throws SQLException, IOException {
-        ManufacturerDaoImpl manufacturerDao = new ManufacturerDaoImpl(this.conn);
+        ManufacturerDao manufacturerDao = new ManufacturerDao(this.conn);
         List<Manufacturer> manufacturers = new ArrayList<Manufacturer>();
 
         String line;
@@ -256,7 +250,7 @@ public class AdministratorOperation extends BaseOperation {
 
     // Insert the salesperson data to the database
     private void insertSalespersonDataFromFile(String filepath) throws SQLException, IOException {
-        SalespersonDaoImpl salespersonDaoImpl = new SalespersonDaoImpl(this.conn);
+        SalespersonDao salespersonDaoImpl = new SalespersonDao(this.conn);
         List<Salesperson> salespersons = new ArrayList<Salesperson>();
 
         String line;
@@ -274,7 +268,7 @@ public class AdministratorOperation extends BaseOperation {
 
     // Insert the transaction data to the database
     private void insertTransactionDataFromFile(String filepath) throws SQLException, IOException {
-        TransactionDaoImpl transactionDaoImpl = new TransactionDaoImpl(this.conn);
+        TransactionDao transactionDaoImpl = new TransactionDao(this.conn);
         List<Transaction> transactions = new ArrayList<Transaction>();
 
         String line;
@@ -301,17 +295,17 @@ public class AdministratorOperation extends BaseOperation {
         String choice = inputReader.readLine();
 
         if (!isValidTableName(choice)) {
-            System.out.println(choice + " is not a table in database.");
+            System.out.println("Error: " + choice + " is not a table in database.");
             return;
         }
 
         System.out.println("Content of table category:");
         switch (choice) {
             case "category":
-                CategoryDaoImpl categoryDao = new CategoryDaoImpl(this.conn);
+                CategoryDao categoryDao = new CategoryDao(this.conn);
                 List<Category> categories = categoryDao
                         .orderBy(Category.ColumnKey.ID, OrderDirection.ASC)
-                        .getAllCategories();
+                        .getAll();
 
                 System.out.println("| cID | cName |");
                 categories.forEach(
@@ -320,10 +314,10 @@ public class AdministratorOperation extends BaseOperation {
                                 category.getID(), category.getName()));
                 break;
             case "manufacturer":
-                ManufacturerDaoImpl manufacturerDao = new ManufacturerDaoImpl(this.conn);
+                ManufacturerDao manufacturerDao = new ManufacturerDao(this.conn);
                 List<Manufacturer> manufacturers = manufacturerDao
                         .orderBy(Manufacturer.ColumnKey.ID, OrderDirection.ASC)
-                        .getAllManufacturers();
+                        .getAll();
 
                 System.out.println("| mID | mName | mAddress | mPhoneNumber |");
                 manufacturers.forEach(
@@ -338,7 +332,7 @@ public class AdministratorOperation extends BaseOperation {
                 PartDaoImpl partDaoImpl = new PartDaoImpl(this.conn);
                 List<Part> parts = partDaoImpl
                         .orderBy(Part.ColumnKey.ID, OrderDirection.ASC)
-                        .getAllParts();
+                        .getAll();
 
                 System.out.println("| pID | pName | pPrice | mID | cID | pWarrantyPeriod | pAvailableQuantity |");
                 parts.forEach(part -> System.out.printf(
@@ -352,10 +346,10 @@ public class AdministratorOperation extends BaseOperation {
                         part.getAvailableQuantity()));
                 break;
             case "salesperson":
-                SalespersonDaoImpl salespersonDaoImpl = new SalespersonDaoImpl(this.conn);
+                SalespersonDao salespersonDaoImpl = new SalespersonDao(this.conn);
                 List<Salesperson> salespersons = salespersonDaoImpl
                         .orderBy(Salesperson.ColumnKey.ID, OrderDirection.ASC)
-                        .getAllSalespersons();
+                        .getAll();
 
                 System.out.println("| sID | sName | sAddress | sPhoneNumber | sExperience |");
                 salespersons.forEach(
@@ -368,10 +362,10 @@ public class AdministratorOperation extends BaseOperation {
                                 salesperson.getExperience()));
                 break;
             case "transaction":
-                TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
+                TransactionDao transactionDao = new TransactionDao(this.conn);
                 List<Transaction> transactions = transactionDao
                         .orderBy(Transaction.ColumnKey.ID, OrderDirection.ASC)
-                        .getAllTransactions();
+                        .getAll();
 
                 System.out.println("| tID | pID | sID | tDate |");
                 transactions.forEach(

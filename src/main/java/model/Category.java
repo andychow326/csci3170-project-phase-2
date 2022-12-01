@@ -5,7 +5,7 @@ public class Category extends BaseModel {
 
     public static final String TABLE_NAME = "category";
 
-    public enum ColumnKey implements BaseColumnKey {
+    public enum ColumnKey implements BaseModel.ColumnKey {
         ID("cID"),
         NAME("cName");
 
@@ -34,8 +34,8 @@ public class Category extends BaseModel {
 
     // Validate the Category entries format
     public void validate() throws IllegalArgumentException {
-        this.checkInRange("Category ID", this.id, 1, 9);
-        this.checkNonEmptyString("Category Name", this.name);
+        checkInRange("Category ID", this.id, 1, 9);
+        checkNonEmptyString("Category Name", this.name);
     }
 
     public String getName() {
@@ -48,10 +48,7 @@ public class Category extends BaseModel {
 
     public static Category parseString(String rawString) throws IllegalArgumentException {
         String[] record = rawString.split("\t");
-        if (record.length != 2) {
-            throw new IllegalArgumentException(
-                    "Invalid number of entries, expected: 2, actual: " + record.length);
-        }
+        checkRecordLength(record.length, 2);
         return new Category(Integer.parseInt(record[0]), record[1]);
     }
 }

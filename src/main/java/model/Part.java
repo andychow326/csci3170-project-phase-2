@@ -10,13 +10,13 @@ public class Part extends BaseModel {
 
     public static final String TABLE_NAME = "part";
 
-    public enum ColumnKey implements BaseColumnKey {
+    public enum ColumnKey implements BaseModel.ColumnKey {
         ID("pID"),
         NAME("pName"),
         PRICE("pPrice"),
         MANUFACTURER_ID("mID"),
         CATEGORY_ID("cID"),
-        WRANS_PERIOD("pWarrantyPeriod"),
+        WARRANTY_PERIOD("pWarrantyPeriod"),
         AVAILABLE_QUANTITY("pAvailableQuantity");
 
         private final String key;
@@ -55,13 +55,13 @@ public class Part extends BaseModel {
 
     // Validate the Part entries format
     public void validate() throws IllegalArgumentException {
-        this.checkInRange("Part ID", this.id, 1, 999);
-        this.checkNonEmptyString("Part Name", this.name);
-        this.checkInRange("Part Price", this.price, 1, 99999);
-        this.checkInRange("Part Manufacturer ID", this.manufacturerID, 1, 99);
-        this.checkInRange("Part Category ID", this.categoryID, 1, 9);
-        this.checkInRange("Part Warranty Period", this.warrantyPeriod, 1, 99);
-        this.checkInRange("Part Available Quantity", this.availableQuantity, 0, 99);
+        checkInRange("Part ID", this.id, 1, 999);
+        checkNonEmptyString("Part Name", this.name);
+        checkInRange("Part Price", this.price, 1, 99999);
+        checkInRange("Part Manufacturer ID", this.manufacturerID, 1, 99);
+        checkInRange("Part Category ID", this.categoryID, 1, 9);
+        checkInRange("Part Warranty Period", this.warrantyPeriod, 1, 99);
+        checkInRange("Part Available Quantity", this.availableQuantity, 0, 99);
 
     }
 
@@ -115,10 +115,7 @@ public class Part extends BaseModel {
 
     public static Part parseString(String rawString) throws IllegalArgumentException {
         String[] record = rawString.split("\t");
-        if (record.length != 7) {
-            throw new IllegalArgumentException(
-                    "Invalid number of entries, expected: 7, actual: " + record.length);
-        }
+        checkRecordLength(record.length, 7);
         return new Part(
                 Integer.parseInt(record[0]),
                 record[1],

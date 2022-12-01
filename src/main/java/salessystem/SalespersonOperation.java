@@ -7,10 +7,10 @@ import java.io.IOException;
 
 import client.DatabaseClient;
 import dao.PartDaoImpl;
-import dao.PartRelationalDaoImpl;
-import dao.TransactionDaoImpl;
+import dao.PartRelationalDao;
+import dao.TransactionDao;
 import dao.Dao.OrderDirection;
-import model.BaseColumnKey;
+import model.BaseModel;
 import model.Manufacturer;
 import model.Part;
 import model.PartRelational;
@@ -40,14 +40,11 @@ public class SalespersonOperation extends BaseOperation {
             try {
                 isExit = selectOperation();
             } catch (SQLException e) {
-                System.out.println("Error excecuting SQL query");
-                System.out.println("Error code: " + e.getErrorCode());
-                System.out.println("SQL state: " + e.getSQLState());
-                System.out.println("Message: " + e.getMessage());
-                e.printStackTrace();
+                handleSQLException(e);
+            } catch (IllegalArgumentException e) {
+                handleIllegalArgumentException(e);
             } catch (IOException e) {
-                System.out.println("I/O Error");
-                e.printStackTrace();
+                handleIOException(e);
             }
         }
     }
@@ -73,7 +70,7 @@ public class SalespersonOperation extends BaseOperation {
                 isExit = true;
                 break;
             default:
-                System.out.println("ERROR!! Input must be within 1 to 5!");
+                System.out.println("Error: Input must be within 1 to 5");
         }
 
         return isExit;
@@ -81,7 +78,7 @@ public class SalespersonOperation extends BaseOperation {
 
     // Perform search parts operation
     private void searchPartsOption() throws SQLException, IOException {
-        BaseColumnKey criterion;
+        BaseModel.ColumnKey criterion;
         String criterionValue;
         OrderDirection order;
 
@@ -92,7 +89,7 @@ public class SalespersonOperation extends BaseOperation {
     }
 
     // Ask for input search criterion
-    private BaseColumnKey selectSearchPartsCriterion() throws IOException {
+    private BaseModel.ColumnKey selectSearchPartsCriterion() throws IOException {
         while (true) {
             System.out.println("Choose the Search Criterion:");
             System.out.println("1. Part Name");
@@ -106,7 +103,7 @@ public class SalespersonOperation extends BaseOperation {
                 case 2:
                     return Manufacturer.ColumnKey.NAME;
                 default:
-                    System.out.println("Invalid Choice");
+                    System.out.println("Error: Invalid Choice");
             }
         }
     }
@@ -133,20 +130,20 @@ public class SalespersonOperation extends BaseOperation {
                 case 2:
                     return OrderDirection.DESC;
                 default:
-                    System.out.println("Invalid Choice");
+                    System.out.println("Error: Invalid Choice");
             }
         }
     }
 
     // Show the search parts content
-    private void showSearchPartsContent(BaseColumnKey searchKey, String searchValue, OrderDirection order)
+    private void showSearchPartsContent(BaseModel.ColumnKey searchKey, String searchValue, OrderDirection order)
             throws SQLException {
-        PartRelationalDaoImpl partRelationalDao = new PartRelationalDaoImpl(this.conn);
+        PartRelationalDao partRelationalDao = new PartRelationalDao(this.conn);
         List<PartRelational> parts = partRelationalDao
                 .where(searchKey)
                 .like(searchValue)
                 .orderBy(Part.ColumnKey.PRICE, order)
-                .getAllParts();
+                .getAll();
 
         System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty | Price |");
         parts.forEach(
@@ -168,13 +165,17 @@ public class SalespersonOperation extends BaseOperation {
         int salespersonID = enterSellPartSalespersonID();
 
         PartDaoImpl partDao = new PartDaoImpl(this.conn);
-        Part part = partDao.getPart(partID);
+        Part part = partDao.get(partID);
+        if (part == null) {
+            System.out.println("Error: Part not found");
+            return;
+        }
         if (part.getAvailableQuantity() > 0) {
             sellPart(partDao, part, salespersonID);
             return;
         }
 
-        System.out.println("Error the part is not available");
+        System.out.println("Error: The part is not available");
     }
 
     // Ask for input sell part id
@@ -208,7 +209,7 @@ public class SalespersonOperation extends BaseOperation {
     // Sell the part with the corresponding salesperson and display the status of
     // current part
     private void sellPart(PartDaoImpl partDao, Part part, int salespersonID) throws SQLException {
-        TransactionDaoImpl transactionDao = new TransactionDaoImpl(this.conn);
+        TransactionDao transactionDao = new TransactionDao(this.conn);
         int newPrimaryKey = transactionDao.getNewPrimaryKey(Transaction.ColumnKey.ID, Transaction.TABLE_NAME);
         Date currentDate = transactionDao.getCurrentDate();
 

@@ -5,10 +5,10 @@ import java.util.List;
 import java.io.IOException;
 
 import client.DatabaseClient;
-import dao.ManufacturerRelationalDaoImpl;
-import dao.PartRelationalDaoImpl;
-import dao.SalespersonDaoImpl;
-import dao.SalespersonRelationalDaoImpl;
+import dao.ManufacturerRelationalDao;
+import dao.PartRelationalDao;
+import dao.SalespersonDao;
+import dao.SalespersonRelationalDao;
 import dao.Dao.OrderDirection;
 import model.ManufacturerRelational;
 import model.PartRelational;
@@ -42,14 +42,11 @@ public class ManagerOperation extends BaseOperation {
             try {
                 isExit = selectOperation();
             } catch (SQLException e) {
-                System.out.println("Error excecuting SQL query");
-                System.out.println("Error code: " + e.getErrorCode());
-                System.out.println("SQL state: " + e.getSQLState());
-                System.out.println("Message: " + e.getMessage());
-                e.printStackTrace();
+                handleSQLException(e);
+            } catch (IllegalArgumentException e) {
+                handleIllegalArgumentException(e);
             } catch (IOException e) {
-                System.out.println("I/O Error");
-                e.printStackTrace();
+                handleIOException(e);
             }
         }
     }
@@ -82,7 +79,7 @@ public class ManagerOperation extends BaseOperation {
                 break;
 
             default:
-                System.out.println("ERROR!! Input must be within 1 to 5!");
+                System.out.println("Error: Input must be within 1 to 5");
         }
 
         return isExit;
@@ -91,10 +88,10 @@ public class ManagerOperation extends BaseOperation {
     // List all salespersons by experience range and order by specific order
     private void listAllSalespersonsByExperience() throws SQLException, IOException {
         OrderDirection order = getListingOrder();
-        SalespersonDaoImpl salespersonDao = new SalespersonDaoImpl(this.conn);
+        SalespersonDao salespersonDao = new SalespersonDao(this.conn);
         List<Salesperson> salespersons = salespersonDao
                 .orderBy(Salesperson.ColumnKey.EXPERIENCE, order)
-                .getAllSalespersons();
+                .getAll();
 
         System.out.println("| ID | Name | Mobile Phone | Years of Experience |");
         salespersons.forEach(
@@ -122,7 +119,7 @@ public class ManagerOperation extends BaseOperation {
                 case 2:
                     return OrderDirection.DESC;
                 default:
-                    System.out.println("Invalid Choice");
+                    System.out.println("Error: Invalid Choice");
             }
         }
     }
@@ -135,7 +132,7 @@ public class ManagerOperation extends BaseOperation {
         System.out.print("Type in the upper bound for years of experience: ");
         int upperBound = getInputInteger();
 
-        SalespersonRelationalDaoImpl salespersonRelationalDao = new SalespersonRelationalDaoImpl(this.conn);
+        SalespersonRelationalDao salespersonRelationalDao = new SalespersonRelationalDao(this.conn);
         List<SalespersonRelational> salespersons = salespersonRelationalDao
                 .orderBy(SalespersonRelational.ColumnKey.ID, OrderDirection.DESC)
                 .getAllSalespersonsByExperienceRangeWithTransactionCount(
@@ -155,7 +152,7 @@ public class ManagerOperation extends BaseOperation {
 
     // Show total sales value of each manufacturer
     private void showTotalSalesValueOfEachManufacturer() throws SQLException, IOException {
-        ManufacturerRelationalDaoImpl manufacturerDao = new ManufacturerRelationalDaoImpl(this.conn);
+        ManufacturerRelationalDao manufacturerDao = new ManufacturerRelationalDao(this.conn);
         List<ManufacturerRelational> manufacturers = manufacturerDao.getAllManufacturersWithTotalSalesValue();
 
         System.out.println("| Manufacturer ID | Manufacturer Name | Total Sales Value |");
@@ -173,7 +170,7 @@ public class ManagerOperation extends BaseOperation {
         System.out.print("Type in the number of parts: ");
         int n = getInputInteger();
 
-        PartRelationalDaoImpl partRelationalDao = new PartRelationalDaoImpl(this.conn);
+        PartRelationalDao partRelationalDao = new PartRelationalDao(this.conn);
         List<PartRelational> parts = partRelationalDao
                 .limit(n)
                 .getAllPartsWithTransactionCount();

@@ -8,7 +8,7 @@ import java.util.List;
 
 import model.Part;
 
-public class PartDaoImpl extends DaoImpl<PartDaoImpl> implements PartDao {
+public class PartDaoImpl extends DaoImpl<PartDaoImpl> implements BaseDao<Part> {
     public PartDaoImpl(Connection conn) {
         super(conn);
     }
@@ -57,7 +57,7 @@ public class PartDaoImpl extends DaoImpl<PartDaoImpl> implements PartDao {
     }
 
     @Override
-    public Part getPart(int id) throws SQLException {
+    public Part get(int id) throws SQLException {
         String query = "SELECT * FROM part WHERE pID =?";
         PreparedStatement ps = conn.prepareStatement(query);
         ps.setInt(1, id);
@@ -79,7 +79,7 @@ public class PartDaoImpl extends DaoImpl<PartDaoImpl> implements PartDao {
     }
 
     @Override
-    public List<Part> getAllParts() throws SQLException {
+    public List<Part> getAll() throws SQLException {
         String query = "SELECT * FROM part " + getQuerySuffix();
         PreparedStatement ps = conn.prepareStatement(query);
 

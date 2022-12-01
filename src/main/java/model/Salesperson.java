@@ -8,7 +8,7 @@ public class Salesperson extends BaseModel {
 
     public static final String TABLE_NAME = "salesperson";
 
-    public enum ColumnKey implements BaseColumnKey {
+    public enum ColumnKey implements BaseModel.ColumnKey {
         ID("sID"),
         NAME("sName"),
         ADDRESS("sAddress"),
@@ -48,11 +48,11 @@ public class Salesperson extends BaseModel {
 
     // Validate the Salesperson entries format
     public void validate() throws IllegalArgumentException {
-        this.checkInRange("Salesperson ID", id, 1, 99);
-        this.checkNonEmptyString("Salesperson Name", name);
-        this.checkNonEmptyString("Salesperson Address", address);
-        this.checkInRange("Salesperson Phone Number", phoneNumber, 10000000, 99999999);
-        this.checkInRange("Salesperson Experience", experience, 1, 9);
+        checkInRange("Salesperson ID", id, 1, 99);
+        checkNonEmptyString("Salesperson Name", name);
+        checkNonEmptyString("Salesperson Address", address);
+        checkInRange("Salesperson Phone Number", phoneNumber, 10000000, 99999999);
+        checkInRange("Salesperson Experience", experience, 1, 9);
 
     }
 
@@ -90,10 +90,7 @@ public class Salesperson extends BaseModel {
 
     public static Salesperson parseString(String rawString) throws IllegalArgumentException {
         String[] record = rawString.split("\t");
-        if (record.length != 5) {
-            throw new IllegalArgumentException(
-                    "Invalid number of entries, expected: 5, actual: " + record.length);
-        }
+        checkRecordLength(record.length, 5);
         return new Salesperson(
                 Integer.parseInt(record[0]),
                 record[1],

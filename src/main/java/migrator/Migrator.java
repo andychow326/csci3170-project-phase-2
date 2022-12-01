@@ -50,15 +50,15 @@ public class Migrator {
         }
     }
 
-    public void up() throws SQLException, IOException {
+    public void up() throws SQLException, FileNotFoundException, IOException {
         this.migrate(MigrationType.UP);
     }
 
-    public void down() throws SQLException, IOException {
+    public void down() throws SQLException, FileNotFoundException, IOException {
         this.migrate(MigrationType.DOWN);
     }
 
-    private Statement loadSchema(MigrationType type) throws SQLException, IOException {
+    private Statement loadSchema(MigrationType type) throws SQLException, FileNotFoundException, IOException {
         Statement statement;
         String line;
         StringBuffer query = new StringBuffer();
@@ -82,12 +82,12 @@ public class Migrator {
                 isHandlingInvalidLine = true;
                 continue;
             }
-            if (this.isCommentLine(line)) {
+            if (isCommentLine(line)) {
                 continue;
             }
 
             query.append(line);
-            if (this.isQueryEnd(line)) {
+            if (isQueryEnd(line)) {
                 statement.addBatch(query.toString());
                 query.setLength(0);
             }
@@ -98,19 +98,19 @@ public class Migrator {
         return statement;
     }
 
-    private int[] migrate(MigrationType type) throws SQLException, IOException {
+    private int[] migrate(MigrationType type) throws SQLException, FileNotFoundException, IOException {
         Statement statement = this.loadSchema(type);
         int[] updateCounts = statement.executeBatch();
         return updateCounts;
     }
 
     // Currently only supports two kinds of comment patterns
-    private boolean isCommentLine(String line) {
+    private static boolean isCommentLine(String line) {
         return line.startsWith("--") || line.startsWith("#");
     }
 
     // The query should be ended if the string contains the query separator
-    private boolean isQueryEnd(String line) {
+    private static boolean isQueryEnd(String line) {
         return line.indexOf(QUERY_SEPARATOR) != -1;
     }
 }
