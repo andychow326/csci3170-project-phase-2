@@ -49,6 +49,7 @@ public class Part extends BaseModel {
         this.manufacturerID = manufacturerID;
         this.categoryID = categoryID;
         this.warrantyPeriod = warrantyPeriod;
+        this.availableQuantity = availableQuantity;
 
         this.validate();
     }

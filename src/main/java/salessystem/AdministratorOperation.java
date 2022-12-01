@@ -16,7 +16,7 @@ import java.util.List;
 import client.DatabaseClient;
 import dao.CategoryDao;
 import dao.ManufacturerDao;
-import dao.PartDaoImpl;
+import dao.PartDao;
 import dao.SalespersonDao;
 import dao.TransactionDao;
 import dao.Dao.OrderDirection;
@@ -232,7 +232,7 @@ public class AdministratorOperation extends BaseOperation {
 
     // Insert the part data to the database
     private void insertPartDataFromFile(String filepath) throws SQLException, IOException {
-        PartDaoImpl partDaoImpl = new PartDaoImpl(this.conn);
+        PartDao partDaoImpl = new PartDao(this.conn);
         List<Part> parts = new ArrayList<Part>();
 
         String line;
@@ -329,7 +329,7 @@ public class AdministratorOperation extends BaseOperation {
                                 manufacturer.getPhoneNumber()));
                 break;
             case "part":
-                PartDaoImpl partDaoImpl = new PartDaoImpl(this.conn);
+                PartDao partDaoImpl = new PartDao(this.conn);
                 List<Part> parts = partDaoImpl
                         .orderBy(Part.ColumnKey.ID, OrderDirection.ASC)
                         .getAll();

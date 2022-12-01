@@ -6,7 +6,7 @@ import java.util.List;
 import java.io.IOException;
 
 import client.DatabaseClient;
-import dao.PartDaoImpl;
+import dao.PartDao;
 import dao.PartRelationalDao;
 import dao.TransactionDao;
 import dao.Dao.OrderDirection;
@@ -164,7 +164,7 @@ public class SalespersonOperation extends BaseOperation {
         int partID = enterSellPartID();
         int salespersonID = enterSellPartSalespersonID();
 
-        PartDaoImpl partDao = new PartDaoImpl(this.conn);
+        PartDao partDao = new PartDao(this.conn);
         Part part = partDao.get(partID);
         if (part == null) {
             System.out.println("Error: Part not found");
@@ -208,7 +208,7 @@ public class SalespersonOperation extends BaseOperation {
 
     // Sell the part with the corresponding salesperson and display the status of
     // current part
-    private void sellPart(PartDaoImpl partDao, Part part, int salespersonID) throws SQLException {
+    private void sellPart(PartDao partDao, Part part, int salespersonID) throws SQLException {
         TransactionDao transactionDao = new TransactionDao(this.conn);
         int newPrimaryKey = transactionDao.getNewPrimaryKey(Transaction.ColumnKey.ID, Transaction.TABLE_NAME);
         Date currentDate = transactionDao.getCurrentDate();

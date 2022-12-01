@@ -8,8 +8,8 @@ import java.util.List;
 
 import model.Part;
 
-public class PartDaoImpl extends DaoImpl<PartDaoImpl> implements BaseDao<Part> {
-    public PartDaoImpl(Connection conn) {
+public class PartDao extends DaoImpl<PartDao> implements BaseDao<Part> {
+    public PartDao(Connection conn) {
         super(conn);
     }
 
